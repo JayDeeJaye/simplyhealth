@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Simply Health Clinic</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Bootstrap core CSS -->
+        <link href="css/bootstrap.css" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="css/signin.css" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="css/custom.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+          <div class="container">
+            <div class="row">
+              <div class="navbar-header col-md-8">
+                <a class="navbar-brand" rel="home" title="Simply Health Clinic">Simply Health Clinic App</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="page-content">
+            <form class="form-horizontal form-signin" id="formLogin" name="formLogin" method="post" action="dashboard.html" onsubmit="return userLogin()">
+                <div class="control-group">
+                    <label class="control-label" for="inputUserName"><span class="glyphicon glyphicon-user"></span> Username</label>
+                    <div class="controls">
+                        <input type="text" class="form-control" id="inputUserName" name="user" placeholder="User name" autocomplete="off" required autofocus>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputPassword"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
+                    <div class="controls">
+                        <input type="password" class="form-control" id="inputPassword" name="pwd" placeholder="***********" autocomplete="off" required>
+                    </div>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <br>
+                <div style="text-align: center">
+                    Don't have an account? <a href="registerstaff.html">Signup Staff</a>
+                    <br> Or <a href="registerpatient.html">Signup New Patient</a>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
