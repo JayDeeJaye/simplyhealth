@@ -91,9 +91,26 @@ if (isset($_GET['action'])) {
                         $response["success"] = -1;
                         $response["message"] = "Unable to create the user.";
                     } else {
-                        $sql = "INSERT INTO persons (firstname, lastname, email, address1, address2, city, state, zipcode) "
-                            . "VALUES ('$fname','$lname','$email','$address1', '$address2', '$city', '$state', '$zipcode')";
-                        //echo $sql;
+                        $sql = "Select id FROM users where username='$username'";
+                        $userid = "";
+                        $roleid = "";
+                        $result = $mysqlObj->executeQuery($sql);
+
+                        if($result->num_rows > 0) {
+                            $row = $result->fetch_assoc();
+                            $userid = $row['id'];
+                        }
+                        $sql = "Select id FROM roles where rolename='$role'";
+                        $result = $mysqlObj->executeQuery($sql);
+
+                        if($result->num_rows > 0) {
+                            $row = $result->fetch_assoc();
+                            $roleid = $row['id'];
+                        }
+
+                        $sql = "INSERT INTO persons (firstname, lastname, email, address1, address2, city, state, zipcode, userid, roleid) "
+                            . "VALUES ('$fname','$lname','$email','$address1', '$address2', '$city', '$state', '$zipcode', '$userid', '$roleid')";
+                        echo $sql . "<br>";
                         $result = $mysqlObj->executeQuery($sql);
                         if($result === false) {
                             $response["success"] = -1;
