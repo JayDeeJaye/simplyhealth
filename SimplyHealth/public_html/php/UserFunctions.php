@@ -75,34 +75,36 @@ if (isset($_GET['action'])) {
             $role = $_GET['role'];
 
             //Select username, pwd from users table
-             $sql = "Select username, password FROM users where username='$username'"; 
-             $result = $mysqlObj->executeQuery($sql);
+            $sql = "Select username, password FROM users where username='$username'"; 
+            $result = $mysqlObj->executeQuery($sql);
 
-             if($result != NULL) {
-                 if($result->num_rows > 0) {
-                    $response["success"] = -1;
-                    $response["message"] = "Unable to create the user, it is already exist.";
-                 } else {
-                     //create the user in users table and persons table
-                    $sql = "INSERT INTO users (userName, password) VALUES ('$username', $password)";
+            if($result != NULL) {
+                if($result->num_rows > 0) {
+                   $response["success"] = -1;
+                   $response["message"] = "Unable to create the user, it is already exist.";
+                } else {
+                    //create the user in users table and persons table
+                    $sql = "INSERT INTO users (username, password) VALUES ('$username', $password)";
                     $result = $mysqlObj->executeQuery($sql);
+                    //echo $sql;
                     if($result === false) {                         
-                       $response["success"] = -1;
-                       $response["message"] = "Unable to create the user.";
+                        $response["success"] = -1;
+                        $response["message"] = "Unable to create the user.";
                     } else {
-                       $sql = "INSERT INTO persons (firstname, lastname, email, address1, address2, city, state, zipcode) "
-                           . "VALUES ('$fname','$lname','$email','$address1', '$address2', '$city', '$state', '$zipcode')";
-                       $result = $mysqlObj->executeQuery($sql);
-                       if($result === false) {
-                           $response["success"] = -1;
-                           $response["message"] = "Unable to create the user on the persons table.";                             
-                       } else {
-                           $response["success"] = 0;
-                           $response["message"] = "Successfully created the role.";                         
-                       }                         
+                        $sql = "INSERT INTO persons (firstname, lastname, email, address1, address2, city, state, zipcode) "
+                            . "VALUES ('$fname','$lname','$email','$address1', '$address2', '$city', '$state', '$zipcode')";
+                        //echo $sql;
+                        $result = $mysqlObj->executeQuery($sql);
+                        if($result === false) {
+                            $response["success"] = -1;
+                            $response["message"] = "Unable to create the user on the persons table.";                             
+                        } else {
+                            $response["success"] = 0;
+                            $response["message"] = "Successfully created the role.";                         
+                        }                         
                     }
-                 }
-             }
+                }
+            }
 
         } else {
             // required field is missing

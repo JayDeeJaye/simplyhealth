@@ -17,8 +17,6 @@ function registerstaff() {
     var zipcode = document.getElementById('inputZipcode').value;
     var role = "Admin";
     
-    alert(role);
-    
     var passwordField = $("#inputPassword");
     var conifrmPasswordField = $("#inputConfirmPassword");
 
