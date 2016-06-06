@@ -110,7 +110,7 @@ if (isset($_GET['action'])) {
 
                         $sql = "INSERT INTO persons (firstname, lastname, email, address1, address2, city, state, zipcode, userid, roleid) "
                             . "VALUES ('$fname','$lname','$email','$address1', '$address2', '$city', '$state', '$zipcode', '$userid', '$roleid')";
-                        echo $sql . "<br>";
+                        //echo $sql . "<br>";
                         $result = $mysqlObj->executeQuery($sql);
                         if($result === false) {
                             $response["success"] = -1;
