@@ -8,7 +8,7 @@ var LoginForm;
 
 $( document ).ready(function() {
     $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
-        alert( settings.url + ": "+thrownError + " <br> " + jqxhr.responseJSON.error);
+        alert( settings.url + ": "+thrownError );
     });
     
     $("#formLogin").submit( function(e) {

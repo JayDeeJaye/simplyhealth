@@ -47,15 +47,39 @@
     } // POST (create)
     
     if ($verb == "GET") {
-        // GET one
-        if ($url_pieces[1] == "id") {
+        if (!isset($url_pieces[1])) {
+            // GET all
+            $sql = "SELECT id, userid, firstname, lastname, email, address1, address2, city, state, zipcode FROM patient";
+            if ($result = $dbConn->query($sql)) {
+                if ($result->num_rows > 0) {
+                    $i = 0;
+                    while ($row = $result->fetch_assoc()) {
+                        $patients[$i++] = [
+                          "id"          => $row["id"],
+                          "userId"      => $row["userid"],
+                          "firstName"   => $row["firstname"],
+                          "lastName"    => $row["lastname"],
+                          "email"       => $row["email"],
+                          "address1"    => $row["address1"],
+                          "address2"    => $row["address2"],
+                          "city"        => $row["city"],
+                          "state"       => $row["state"],
+                          "zipcode"     => $row["zipcode"]
+                        ];
+                    }
+                }
+            } else {
+                throw new Exception(mysqli_error($dbConn),"400");
+            }
+        } elseif ($url_pieces[1] == "id") {
+            // GET one by id
             $patientId = $url_pieces[2];
-            
+
             $sql = "SELECT id, userid, firstname, lastname, email, address1, address2, city, state, zipcode FROM patient WHERE id = $patientId";
 
             if ($result = $dbConn->query($sql)) {
                 if ($result->num_rows > 0) {
-                    $row = $result->fetch_array(MYSQLI_ASSOC);
+                    $row = $result->fetch_assoc();
 
                     $data['patientId'] = $row['id'];
                     $data['userId'] = $row['userid'];
@@ -79,9 +103,9 @@
                 throw new Exception(mysqli_error($dbConn),"400");
             } // execute query
         } else {
-            throw new Exception("Missing id filter");
-        } // required api argument
-    } // GET one (retrieve)
+            throw new Exception("Unsupported filter","404");
+        } // GET route
+    } // GET method
     // send the response
     $dbConn->close();
     header($header,null,$status);
