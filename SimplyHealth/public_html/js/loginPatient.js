@@ -3,39 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-function userLogin() {
-    var username = document.getElementById('inputUserName').value;
-    var pwd = document.getElementById('inputPassword').value;
 
-    var loginUserURL = "php/UserFunctions.php?username=" + username + "&password=" + pwd + "&action=login";
-    var result = false;
-    var message = "";
-    $.ajax({
-        url:loginUserURL,
-        async: false,
-        success: function (response) {
-            var json = JSON.parse(response);
-            if(json.success == 0) {
-                result = true;
-            }
-            else {
-                result = false;
-            }
-            message = json.message;
-        },
-        error: function () {
-            alert("Error: Unable to login the user!");
-            result = false;
-        }
+var LoginForm;
+
+$( document ).ready(function() {
+    $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
+        alert( settings.url + ": "+thrownError + " <br> " + jqxhr.responseJSON.error);
     });
-    alert(message);
-    if(result == true) {
-        location.href = "dashboardpatient.html?username=" + username;
-        return true;
-    } else {
-        return false;
-    }
-};
+    
+    $("#formLogin").submit( function(e) {
+        e.preventDefault();
+        LoginForm = this;
 
+        var userData = new Object();
+        userData.username = $("#inputUserName").val();
+        userData.pwd = $("#inputPassword").val();
 
-
+        $.post(
+            "/php/myLogin.php",
+            JSON.stringify(userData),
+            function(response) {
+               LoginForm.submit();
+            });
+    });
+ });

@@ -19,12 +19,40 @@ if ($verb == 'POST') {
         $header="Location: api/users.php/$userId; Content-Type: application/json";
         $data['id']=$userId;
     } else {
-        $status="400";
-        $data['error']=  mysqli_error($dbConn);
-        $header="Content-Type: application/json";
+        throw new Exception(mysqli_error($dbConn),"400");
     }
+} else if ($verb == 'GET') {
+    if ($url_pieces[1] == "me") {
+        // Get the current user and info
+        session_start();
+
+        if (!($me = $_SESSION['username'])) {
+            throw new Exception("No current user!");
+        }
+        $sql = "SELECT u.id userId, p.id patientId, p.firstname firstName "
+                 . "FROM users u LEFT JOIN patient p ON (p.userid = u.id) "
+                 . "WHERE u.username='$me'";
+
+        if ($result = $dbConn->query($sql)) {
+
+            $row = $result->fetch_array(MYSQLI_ASSOC);
+            $data['userId'] = $row['userId'];
+            $data['patient'] = [
+              "id" => $row['patientId'],
+              "firstName" => $row['firstName']
+            ];
+            $status = "200";
+            $header="Content-Type: application/json";
+            $result->close();
+        } else {
+            throw new Exception(mysqli_error($dbConn),"400");
+        }
+    } else {
+        throw new Exception($url_pieces[1] . " not implemented","404");
+    }
+    
 } else {
-    // unhandled function
+    throw new Exception("Method Not Supported: $verb", 405);
 }
 // Send the response
 

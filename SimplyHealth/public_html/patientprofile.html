@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Dashboard</title>
+    <title>SimplyHealth</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -21,38 +21,70 @@
                     <li role="presentation"><a href="#">Second Item</a></li>
                     <li role="presentation"><a href="#">Third Item</a></li>
                 </ul>
+                <p class="navbar-text navbar-right" id="pGreeting">Hello Julianne!</p>
             </div>
         </div>
     </nav>
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-info" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span><strong>Alert</strong> text.</span></div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span id="spanAlert"><strong>Alert</strong> text.</span></div>
         </div>
     </div>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2>Your Medical Information</h2></div>
-            <div class="col-md-12">
-                <form>
-                    <div class="form-group">
-                        <div class="col-md-8 col-sm-8">
-                            <label class="control-label">Do you have Diabetes?</label>
-                        </div>
-                        <div class="col-md-2 col-sm-2">
-                            <input type="radio" name="condDiabetes" value="Y">
-                        </div>
-                        <div class="col-md-2 col-sm-2">
-                            <input type="radio" name="condDiabetes" value="N">
-                        </div>
+                <div><a class="btn btn-link" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" role="button" href="#collapse-1">My History</a>
+                    <div class="collapse in" id="collapse-1">
+                        <form class="form-horizontal" id="frmConditions">
+                            <div class="row">
+                                <div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label class="control-label" for="eczemaInd_Self">Eczema </label>
+                                        </div>
+                                        <div class="col-md-offset-0 col-xs-2"><span><label class="control-label radio-inline" for="eczemaInd_Self"><input type="radio" name="eczemaInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="eczemaInd_Self"><input type="radio" name="eczemaInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label class="control-label" for="highCholInd_Self">High Cholesterol </label>
+                                        </div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="highCholInd_Self"><input type="radio" name="highCholInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="highCholInd_Self"><input type="radio" name="highCholInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label class="control-label" for="highBPInd_Self">High Blood Pressure </label>
+                                        </div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="highBPInd_Self"><input type="radio" name="highBPInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="highBPInd_Self"><input type="radio" name="highBPInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label class="control-label" for="mentalInd_Self">Mental Illness </label>
+                                        </div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="mentalInd_Self"><input type="radio" name="mentalInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="mentalInd_Self"><input type="radio" name="mentalInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label class="control-label" for="obesityInd_Self">Obesity </label>
+                                        </div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="obesityInd_Self"><input type="radio" name="obesityInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="obesityInd_Self"><input type="radio" name="obesityInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/patientProfile.js"></script>
 </body>
 
 </html>
