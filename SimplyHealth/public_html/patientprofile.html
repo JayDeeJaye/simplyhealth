@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimplyHealth</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand navbar-link" href="#">SimplyHealth </a>
+                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li class="active" role="presentation"><a href="#">First Item</a></li>
+                    <li role="presentation"><a href="#">Second Item</a></li>
+                    <li role="presentation"><a href="#">Third Item</a></li>
+                </ul>
+                <p class="navbar-text navbar-right" id="pGreeting">Hello Julianne!</p>
+            </div>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span id="spanAlert"><strong>Alert</strong> text.</span></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div><a class="btn btn-link" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" role="button" href="#collapse-1">My History</a>
+                    <div class="collapse in" id="collapse-1">
+                        <form class="form-horizontal" id="frmConditions">
+                            <div class="row">
+                                <div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label class="control-label" for="eczemaInd_Self">Eczema </label>
+                                        </div>
+                                        <div class="col-md-offset-0 col-xs-2"><span><label class="control-label radio-inline" for="eczemaInd_Self"><input type="radio" name="eczemaInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="eczemaInd_Self"><input type="radio" name="eczemaInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label class="control-label" for="highCholInd_Self">High Cholesterol </label>
+                                        </div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="highCholInd_Self"><input type="radio" name="highCholInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="highCholInd_Self"><input type="radio" name="highCholInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label class="control-label" for="highBPInd_Self">High Blood Pressure </label>
+                                        </div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="highBPInd_Self"><input type="radio" name="highBPInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="highBPInd_Self"><input type="radio" name="highBPInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label class="control-label" for="mentalInd_Self">Mental Illness </label>
+                                        </div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="mentalInd_Self"><input type="radio" name="mentalInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="mentalInd_Self"><input type="radio" name="mentalInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label class="control-label" for="obesityInd_Self">Obesity </label>
+                                        </div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="obesityInd_Self"><input type="radio" name="obesityInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="obesityInd_Self"><input type="radio" name="obesityInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/patientProfile.js"></script>
+</body>
+
+</html>

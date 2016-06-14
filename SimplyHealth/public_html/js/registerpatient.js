@@ -38,29 +38,6 @@ $("form").submit(function(e) {
     
 });
 
-function registerPatient () {
- 
-    var userName = $("#inputUserName").val();
-    var pwd = $("#inputPassword").val();
-    var confirmpwd =$("#inputConfirmPassword").val();
-
-    patientData.firstName = $("#inputFirstName").val();
-    patientData.lastName = $("#inputLastName").val();
-    patientData.email = $("#inputEmail").val();
-    patientData.address1 = $("#inputAddress1").val();
-    patientData.address2 = $("#inputAddress2").val();
-    patientData.city = $("#inputCity").val();
-    patientData.state = $("#inputState").val();
-    patientData.zip = $("#inputZipcode").val();
-
-    // create the user first, we'll need the id
-   var userData = { username: userName, password: pwd };
-   $.post("/api/users.php",
-        JSON.stringify(userData),
-        userSuccess,
-        "json");
-}
-
 function userSuccess (data) {
     $("#div_info").text("Returned from the users api call: "+JSON.stringify(data));
     // Add the patient info for the user.
