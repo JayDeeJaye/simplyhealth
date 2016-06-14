@@ -131,6 +131,27 @@ if (isset($_GET['action'])) {
         }
         // echoing JSON response
         echo json_encode($response);
+    } else if ($action == 'getFullName') {
+        if($sessionObj->isAnyUserLoggedIn()) {
+            $username = $sessionObj->getUserLoggedIn();
+            $sql = "SELECT persons.firstname, persons.lastname FROM persons INNER JOIN users "
+                    . "ON persons.userid=users.id WHERE users.username='$username'";
+            $result = $mysqlObj->executeQuery($sql);
+
+            $firstname = "";
+            $lastname = "";
+            if($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $firstname = $row['firstname'];
+                $lastname = $row['lastname'];
+            }
+            $response["success"] = 1;
+            $response["message"] = $firstname . " " . $lastname;
+        } else {
+            $response["success"] = 0;
+            $response["message"] = "Session timed out, log in again.";
+        }
+        echo json_encode($response);
     }         
 } else {
     // required field is missing

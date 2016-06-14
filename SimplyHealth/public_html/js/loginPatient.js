@@ -30,7 +30,7 @@ function userLogin() {
     });
     alert(message);
     if(result == true) {
-        location.href = "dashboardstaff.html?username=" + username;
+        location.href = "dashboardpatient.html?username=" + username;
         return true;
     } else {
         return false;

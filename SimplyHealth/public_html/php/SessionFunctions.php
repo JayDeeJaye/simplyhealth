@@ -109,6 +109,20 @@ class sessionClass
         return false;
     }
 
+    public function isAnyUserLoggedIn(){
+        if(isset($_SESSION['username']) && isset($_SESSION['loggedIn'])) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getUserLoggedIn() {
+        if(isset($_SESSION['username']) && isset($_SESSION['loggedIn'])) {
+            return $_SESSION['username'];
+        }
+        return "";        
+    }
+    
     public function userLogin($username){
         $_SESSION['username'] = $username;
         $_SESSION['loggedIn'] = true;
