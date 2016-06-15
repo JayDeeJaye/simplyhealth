@@ -34,50 +34,243 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div><a class="btn btn-link" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" role="button" href="#collapse-1">My History</a>
-                    <div class="collapse in" id="collapse-1">
-                        <form class="form-horizontal" id="frmConditions">
-                            <div class="row">
-                                <div>
-                                    <div class="form-group">
-                                        <div class="col-xs-6">
-                                            <label class="control-label" for="eczemaInd_Self">Eczema </label>
-                                        </div>
-                                        <div class="col-md-offset-0 col-xs-2"><span><label class="control-label radio-inline" for="eczemaInd_Self"><input type="radio" name="eczemaInd_Self" value="Y"><strong>Yes</strong></label></span></div>
-                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="eczemaInd_Self"><input type="radio" name="eczemaInd_Self" value="N"><strong>No</strong></label></span></div>
+                <div class='alert-info'>
+                    <h1><a class="btn btn-link" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-bio" role="button" href="#collapse-bio">My Profile</a></h1>
+                </div>
+                <div class="collapse in" id="collapse-bio">
+                    <form class="form-horizontal" id="frmBiographic">
+                        <div class="row">
+                            <div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputFirstName">First Name</label></div>
+                                    <div class="col-xs-7">
+                                        <input type="text" class="form-control" id="inputFirstName" name="fName" placeholder="First Name"  autofocus>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-xs-6">
-                                            <label class="control-label" for="highCholInd_Self">High Cholesterol </label>
-                                        </div>
-                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="highCholInd_Self"><input type="radio" name="highCholInd_Self" value="Y"><strong>Yes</strong></label></span></div>
-                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="highCholInd_Self"><input type="radio" name="highCholInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputLastName">Last Name</label></div>
+                                    <div class="col-xs-7">
+                                        <input type="text" class="form-control" id="inputLastName" name="lName" placeholder="Last Name"  autofocus>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-xs-6">
-                                            <label class="control-label" for="highBPInd_Self">High Blood Pressure </label>
-                                        </div>
-                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="highBPInd_Self"><input type="radio" name="highBPInd_Self" value="Y"><strong>Yes</strong></label></span></div>
-                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="highBPInd_Self"><input type="radio" name="highBPInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputEmail">Email</label></div>
+                                    <div class="col-xs-7">
+                                        <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email" >
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-xs-6">
-                                            <label class="control-label" for="mentalInd_Self">Mental Illness </label>
-                                        </div>
-                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="mentalInd_Self"><input type="radio" name="mentalInd_Self" value="Y"><strong>Yes</strong></label></span></div>
-                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="mentalInd_Self"><input type="radio" name="mentalInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputAddress1">Address 1</label></div>
+                                    <div class="col-xs-7">
+                                        <input type="text" class="form-control" id="inputAddress1" name="address1" placeholder="Address 1" >
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-xs-6">
-                                            <label class="control-label" for="obesityInd_Self">Obesity </label>
-                                        </div>
-                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="obesityInd_Self"><input type="radio" name="obesityInd_Self" value="Y"><strong>Yes</strong></label></span></div>
-                                        <div class="col-xs-2"><span><label class="control-label radio-inline" for="obesityInd_Self"><input type="radio" name="obesityInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputAddress2">Address 2</label></div>
+                                    <div class="col-xs-7">
+                                        <input type="text" class="form-control" id="inputAddress2" name="address2" placeholder="Address 2">
                                     </div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputCity">City</label></div>
+                                    <div class="col-xs-7">
+                                        <input type="text" class="form-control" id="inputCity" name="city" placeholder="City" >
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputState">State</label></div>
+                                    <div class="col-xs-7">
+                                        <input type="text" class="form-control" id="inputState" name="state" placeholder="State" >
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputZipCode">Zipcode</label></div>
+                                    <div class="col-xs-7">
+                                        <input type="text" class="form-control" id="inputZipCode" name="zipcode" placeholder="Zipcode" >
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-1">
+                                    <input class="btn btn-primary" type="button" id="updBiographic" value="Update">
+                                </div>
+                                <div class="col-xs-6" id="statusBiographic"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class='alert-info'>
+                    <h1><a class="btn btn-link" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-ec" role="button" href="#collapse-ec">My Emergency Contact</a></h1>
+                </div>
+                <div class="collapse" id="collapse-ec">
+                    <form class="form-horizontal" id="frmEmergencyContact">
+                        <div class="row">
+                            <div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3">
+                                        <label class="control-label" for="ec_name">Emergency Contact Name</label>
+                                    </div>
+                                    <div class="col-xs-7"><input type="text" id="ec_name" placeholder="Choose someone who doesn't live with you"></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3">
+                                        <label class="control-label" for="ec_phone">Emergency Contact Phone Number</label>
+                                    </div>
+                                    <div class="col-xs-7"><input type="text" id="ec_phone" placeholder="Phone number"></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-1">
+                                    <input class="btn btn-primary" type="button" id="updEmergencyContact" value="Update">
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class='alert-info'>
+                    <h1><a class="btn btn-link" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-insurance" role="button" href="#collapse-insurance">My Insurance</a></h1>
+                </div>
+                <div class="collapse" id="collapse-insurance">
+                    <form class="form-horizontal" id="frmInsurance">
+                        <div class="row">
+                            <div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3">
+                                        <label class="control-label" for="ins_holder">Insurance Policy Holder</label>
+                                    </div>
+                                    <div class="col-xs-7"><input type="text" id="ins_holder" placeholder="Policy holder or self"></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3">
+                                        <label class="control-label" for="ins_holder_ssn">Policy Holder SSN</label>
+                                    </div>
+                                    <div class="col-xs-7"><input type="text" id="ins_holder_ssn" placeholder="SSN"></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3">
+                                        <label class="control-label" for="ins_provider">Insurance Provider</label>
+                                    </div>
+                                    <div class="col-xs-7"><input type="text" id="ins_provider" placeholder="Provider"></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3">
+                                        <label class="control-label" for="ins_number">Policy Number</label>
+                                    </div>
+                                    <div class="col-xs-7"><input type="text" id="ins_number" placeholder="Policy Number"></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3">
+                                        <label class="control-label" for="ins_group">Group Policy Code</label>
+                                    </div>
+                                    <div class="col-xs-7"><input type="text" id="ins_group" placeholder="Group Code"></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-1">
+                                    <input class="btn btn-primary" type="button" id="updInsurance" value="Update">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class='alert-info'>
+                    <h1><a class="btn btn-link" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-hist" role="button" href="#collapse-hist">My History</a></h1>
+                </div>
+                <div class="collapse" id="collapse-hist">
+                    <form class="form-horizontal" id="frmHistory">
+                        <div class="row">
+                            <div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-6">
+                                        <label class="control-label" for="eczemaInd_Self">Eczema </label>
+                                    </div>
+                                    <div class="col-md-offset-0 col-xs-2"><span><label class="control-label radio-inline" for="eczemaInd_Self"><input type="radio" name="eczemaInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                    <div class="col-xs-2"><span><label class="control-label radio-inline" for="eczemaInd_Self"><input type="radio" name="eczemaInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-6">
+                                        <label class="control-label" for="highCholInd_Self">High Cholesterol </label>
+                                    </div>
+                                    <div class="col-xs-2"><span><label class="control-label radio-inline" for="highCholInd_Self"><input type="radio" name="highCholInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                    <div class="col-xs-2"><span><label class="control-label radio-inline" for="highCholInd_Self"><input type="radio" name="highCholInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-6">
+                                        <label class="control-label" for="highBPInd_Self">High Blood Pressure </label>
+                                    </div>
+                                    <div class="col-xs-2"><span><label class="control-label radio-inline" for="highBPInd_Self"><input type="radio" name="highBPInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                    <div class="col-xs-2"><span><label class="control-label radio-inline" for="highBPInd_Self"><input type="radio" name="highBPInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-6">
+                                        <label class="control-label" for="mentalInd_Self">Mental Illness </label>
+                                    </div>
+                                    <div class="col-xs-2"><span><label class="control-label radio-inline" for="mentalInd_Self"><input type="radio" name="mentalInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                    <div class="col-xs-2"><span><label class="control-label radio-inline" for="mentalInd_Self"><input type="radio" name="mentalInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-6">
+                                        <label class="control-label" for="obesityInd_Self">Obesity </label>
+                                    </div>
+                                    <div class="col-xs-2"><span><label class="control-label radio-inline" for="obesityInd_Self"><input type="radio" name="obesityInd_Self" value="Y"><strong>Yes</strong></label></span></div>
+                                    <div class="col-xs-2"><span><label class="control-label radio-inline" for="obesityInd_Self"><input type="radio" name="obesityInd_Self" value="N"><strong>No</strong></label></span></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-1">
+                                    <input class="btn btn-primary" type="button" id="updHistory" value="Update">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

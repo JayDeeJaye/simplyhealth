@@ -65,7 +65,7 @@
                               "address2"    => $row["address2"],
                               "city"        => $row["city"],
                               "state"       => $row["state"],
-                              "zipcode"     => $row["zipcode"]
+                              "zipCode"     => $row["zipcode"]
                             ];
                         }
                     }
@@ -122,7 +122,8 @@
                         . "state='"       . $params['state'] . "', "
                         . "zipcode='"     . $params['zipCode'] . "' WHERE id = $patientId";
 
-                    if ($result = $dbConn->query($sql)) {
+                    $result = $dbConn->query($sql);
+                    if ($result) {
                         $header = "Location: /api/patients/$patientId";
                         $status = "204";
                     } else {
