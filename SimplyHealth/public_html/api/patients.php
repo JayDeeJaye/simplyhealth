@@ -46,9 +46,7 @@
                 $header="Location: $url; Content-Type: application/json";
                 $data['id']=$patientId;
             } else {
-                $status="400";
-                $data['error']=  $dbConn->error();
-                $header="Content-Type: application/json";        
+                throw new Exception(mysqli_error($dbConn));
             }
             break;
         case 'GET':
