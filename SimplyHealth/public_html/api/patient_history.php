@@ -1,4 +1,16 @@
 <?php
+
+    function setPatientHistory($values) {
+        return [
+            "patientId"       => $values["patient_id"],
+            "eczemaSelfInd"   => $values["eczema_self_ind"],
+            "highCholSelfInd" => $values["highchol_self_ind"],
+            "highBpSelfInd"   => $values["highbp_self_ind"],
+            "mentalSelfInd"   => $values["mental_self_ind"],
+            "obesitySelfInd"  => $values["obesity_self_ind"]
+        ];
+        
+    }
     // Set up database configuration, exception handler, request variables
     require_once('apiHeader.php');
 
@@ -7,7 +19,6 @@
     switch($verb) {
 
         case 'POST': 
-
             $patientId          = $params['patientId'];
             $eczemaSelfInd      = array_key_exists('eczemaSelfInd', $params) ? $dbConn->real_escape_string($params['eczemaSelfInd']) : null;
             $highCholSelfInd    = array_key_exists('highCholSelfInd', $params) ? $dbConn->real_escape_string($params['highCholSelfInd']) : null;
@@ -32,7 +43,7 @@
                 $patientId = $dbConn->insert_id;
                 $status = "201";
                 $url="api/patient_history.php/$patientId";
-                $header="Location: $url; Content-Type: application/json";
+                $header="Location: $url";
             } else {
                 throw new Exception(mysqli_error($dbConn),"500");
             }
@@ -45,14 +56,7 @@
                     if ($result->num_rows > 0) {
                         $i = 0;
                         while ($row = $result->fetch_assoc()) {
-                            $data[$i++] = [
-                              "patientId"       => $row["patient_id"],
-                              "eczemaSelfInd"   => $row["eczema_self_ind"],
-                              "highCholSelfInd" => $row["highchol_self_ind"],
-                              "highBpSelfInd"   => $row["highbp_self_ind"],
-                              "mentalSelfInd"   => $row["mental_self_ind"],
-                              "obesitySelfInd"  => $row["obesity_self_ind"]
-                            ];
+                            $data[$i++] = setPatientHistory($row);
                         }
                     }
                 } else {
@@ -67,17 +71,8 @@
 
                 if ($result = $dbConn->query($sql)) {
                     if ($result->num_rows > 0) {
-                        $i = 0;
-                        while ($row = $result->fetch_assoc()) {
-                            $data[$i++] = [
-                              "patientId"       => $row["patient_id"],
-                              "eczemaSelfInd"   => $row["eczema_self_ind"],
-                              "highCholSelfInd" => $row["highchol_self_ind"],
-                              "highBpSelfInd"   => $row["highbp_self_ind"],
-                              "mentalSelfInd"   => $row["mental_self_ind"],
-                              "obesitySelfInd"  => $row["obesity_self_ind"]
-                            ];
-                        }
+                        $row = $result->fetch_assoc();
+                        $data = setPatientHistory($row);
                     } else {
                         // No such record in the database
                         throw new Exception("Patient not found","404");
@@ -97,21 +92,16 @@
             if (isset($url_pieces[1])) {
                 $patientId = $url_pieces[1];
                 if (isset($params)) {
-                    $sql = "UPDATE patient SET "
-                        . "userid="                     . $params['userId'] . ", "
-                        . "firstname='"                 . $params['firstName'] . "', "
-                        . "lastname='"                  . $params['lastName'] . "', "
-                        . "email='"                     . $params['email'] . "', "
-                        . "phone='"                     . $params['phone'] . "', "
-                        . "address1='"                  . $params['address1'] . "', "
-                        . "address2='"                  . $params['address2'] . "', "
-                        . "city='"                      . $params['city'] . "', "
-                        . "state='"                     . $params['state'] . "', "
-                        . "zipcode='"                   . $params['zipCode'] . "', " 
-                        . "emergency_contact_name='"    . $params['emergencyContactName'] . "', " 
-                        . "emergency_contact_phone='"   . $params['emergencyContactPhone'] 
-                        . "' WHERE id = $patientId";
 
+                    $sql = "UPDATE patient_history "
+                        . "SET patient_id=[value-1], "
+                        .     "eczema_self_ind=[value-2], "
+                        .     "highchol_self_ind=[value-3], "
+                        .     "highbp_self_ind=[value-4], "
+                        .     "mental_self_ind=[value-5], "
+                        .     "obesity_self_ind=[value-6] "
+                        . "WHERE patient_id = $patientId";
+                    
                     $result = $dbConn->query($sql);
                     if ($result) {
                         $header = "Location: /api/patients/$patientId";
