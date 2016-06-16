@@ -25,13 +25,11 @@
             </div>
         </div>
     </nav>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-info" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span id="spanAlert"><strong>Alert</strong> text.</span></div>
-        </div>
-    </div>
     <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center" id="divPopup">
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class='alert-info'>
@@ -62,6 +60,14 @@
                                     <div class="col-xs-3"><label class="control-label" for="inputEmail">Email</label></div>
                                     <div class="col-xs-7">
                                         <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email" >
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputPhone">Phone Number</label></div>
+                                    <div class="col-xs-7">
+                                        <input type="text" class="form-control" id="inputPhone" name="phone" placeholder="Phone" >
                                     </div>
                                     <div class="col-xs-1"></div>
                                 </div>
@@ -144,65 +150,6 @@
                                 <div class="col-xs-4"></div>
                                 <div class="col-xs-1">
                                     <input class="btn btn-primary" type="button" id="updEmergencyContact" value="Update">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class='alert-info'>
-                    <h1><a class="btn btn-link" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-insurance" role="button" href="#collapse-insurance">My Insurance</a></h1>
-                </div>
-                <div class="collapse" id="collapse-insurance">
-                    <form class="form-horizontal" id="frmInsurance">
-                        <div class="row">
-                            <div>
-                                <div class="form-group">
-                                    <div class="col-xs-1"></div>
-                                    <div class="col-xs-3">
-                                        <label class="control-label" for="ins_holder">Insurance Policy Holder</label>
-                                    </div>
-                                    <div class="col-xs-7"><input type="text" id="ins_holder" placeholder="Policy holder or self"></div>
-                                    <div class="col-xs-1"></div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-xs-1"></div>
-                                    <div class="col-xs-3">
-                                        <label class="control-label" for="ins_holder_ssn">Policy Holder SSN</label>
-                                    </div>
-                                    <div class="col-xs-7"><input type="text" id="ins_holder_ssn" placeholder="SSN"></div>
-                                    <div class="col-xs-1"></div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-xs-1"></div>
-                                    <div class="col-xs-3">
-                                        <label class="control-label" for="ins_provider">Insurance Provider</label>
-                                    </div>
-                                    <div class="col-xs-7"><input type="text" id="ins_provider" placeholder="Provider"></div>
-                                    <div class="col-xs-1"></div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-xs-1"></div>
-                                    <div class="col-xs-3">
-                                        <label class="control-label" for="ins_number">Policy Number</label>
-                                    </div>
-                                    <div class="col-xs-7"><input type="text" id="ins_number" placeholder="Policy Number"></div>
-                                    <div class="col-xs-1"></div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-xs-1"></div>
-                                    <div class="col-xs-3">
-                                        <label class="control-label" for="ins_group">Group Policy Code</label>
-                                    </div>
-                                    <div class="col-xs-7"><input type="text" id="ins_group" placeholder="Group Code"></div>
-                                    <div class="col-xs-1"></div>
-                                </div>
-                                <div class="col-xs-4"></div>
-                                <div class="col-xs-1">
-                                    <input class="btn btn-primary" type="button" id="updInsurance" value="Update">
                                 </div>
                             </div>
                         </div>

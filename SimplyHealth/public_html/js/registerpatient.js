@@ -23,6 +23,7 @@ $("form").submit(function(e) {
     patientData.firstName = $("#inputFirstName").val();
     patientData.lastName = $("#inputLastName").val();
     patientData.email = $("#inputEmail").val();
+    patientData.phone = $("#inputPhone").val();
     patientData.address1 = $("#inputAddress1").val();
     patientData.address2 = $("#inputAddress2").val();
     patientData.city = $("#inputCity").val();

@@ -11,6 +11,7 @@
             $firstName  = $dbConn->real_escape_string($params['firstName']);
             $lastName   = $dbConn->real_escape_string($params['lastName']);
             $email      = $dbConn->real_escape_string($params['email']);
+            $phone      = $dbConn->real_escape_string($params['phone']);
             $address1   = $dbConn->real_escape_string($params['address1']);
             $address2   = $dbConn->real_escape_string($params['address2']);
             $city       = $dbConn->real_escape_string($params['city']);
@@ -21,6 +22,7 @@
                             . "firstname,"
                             . "lastname,"
                             . "email,"
+                            . "phone,"
                             . "address1,"
                             . "address2,"
                             . "city,"
@@ -30,6 +32,7 @@
                             . ",'$firstName'"
                             . ",'$lastName'"
                             . ",'$email'"
+                            . ",'$phone'"
                             . ",'$address1'"
                             . ",'$address2'"
                             . ",'$city'"
@@ -50,22 +53,26 @@
         case 'GET':
             if (!isset($url_pieces[1])) {
                 // GET all
-                $sql = "SELECT id, userid, firstname, lastname, email, address1, address2, city, state, zipcode FROM patient";
+                $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode, "
+                    . "emergency_contact_name, emergency_contact_phone FROM patient";
                 if ($result = $dbConn->query($sql)) {
                     if ($result->num_rows > 0) {
                         $i = 0;
                         while ($row = $result->fetch_assoc()) {
                             $data[$i++] = [
-                              "id"          => $row["id"],
-                              "userId"      => $row["userid"],
-                              "firstName"   => $row["firstname"],
-                              "lastName"    => $row["lastname"],
-                              "email"       => $row["email"],
-                              "address1"    => $row["address1"],
-                              "address2"    => $row["address2"],
-                              "city"        => $row["city"],
-                              "state"       => $row["state"],
-                              "zipCode"     => $row["zipcode"]
+                              "id"                      => $row["id"],
+                              "userId"                  => $row["userid"],
+                              "firstName"               => $row["firstname"],
+                              "lastName"                => $row["lastname"],
+                              "email"                   => $row["email"],
+                              "phone"                   => $row["phone"],
+                              "address1"                => $row["address1"],
+                              "address2"                => $row["address2"],
+                              "city"                    => $row["city"],
+                              "state"                   => $row["state"],
+                              "zipCode"                 => $row["zipcode"],
+                              "emergencyContactName"    => $row["zipcode"],
+                              "emergencyContactPhone"   => $row["zipcode"]
                             ];
                         }
                     }
@@ -76,22 +83,26 @@
                 // GET one by id
                 $patientId = $url_pieces[1];
 
-                $sql = "SELECT id, userid, firstname, lastname, email, address1, address2, city, state, zipcode FROM patient WHERE id = $patientId";
+                $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode, "
+                    . " emergency_contact_name, emergency_contact_phone FROM patient WHERE id = $patientId";
 
                 if ($result = $dbConn->query($sql)) {
                     if ($result->num_rows > 0) {
                         $row = $result->fetch_assoc();
 
-                        $data['id']         = $row['id'];
-                        $data['userId']     = $row['userid'];
-                        $data['firstName']  = $row['firstname'];
-                        $data['lastName']   = $row['lastname'];
-                        $data['email']      = $row['email'];
-                        $data['address1']   = $row['address1'];
-                        $data['address2']   = $row['address2'];
-                        $data['city']       = $row['city'];
-                        $data['state']      = $row['state'];
-                        $data['zipCode']    = $row['zipcode'];
+                        $data['id']                     = $row['id'];
+                        $data['userId']                 = $row['userid'];
+                        $data['firstName']              = $row['firstname'];
+                        $data['lastName']               = $row['lastname'];
+                        $data['email']                  = $row['email'];
+                        $data['phone']                  = $row['phone'];
+                        $data['address1']               = $row['address1'];
+                        $data['address2']               = $row['address2'];
+                        $data['city']                   = $row['city'];
+                        $data['state']                  = $row['state'];
+                        $data['zipCode']                = $row['zipcode'];
+                        $data['emergencyContactName']   = $row['emergency_contact_name'];
+                        $data['emergencyContactPhone']  = $row['emergency_contact_phone'];
 
                         $status = "200";
                         $header="Content-Type: application/json";
@@ -112,15 +123,19 @@
                 $patientId = $url_pieces[1];
                 if (isset($params)) {
                     $sql = "UPDATE patient SET "
-                        . "userid="       . $params['userId'] . ", "
-                        . "firstname='"   . $params['firstName'] . "', "
-                        . "lastname='"    . $params['lastName'] . "', "
-                        . "email='"       . $params['email'] . "', "
-                        . "address1='"    . $params['address1'] . "', "
-                        . "address2='"    . $params['address2'] . "', "
-                        . "city='"        . $params['city'] . "', "
-                        . "state='"       . $params['state'] . "', "
-                        . "zipcode='"     . $params['zipCode'] . "' WHERE id = $patientId";
+                        . "userid="                     . $params['userId'] . ", "
+                        . "firstname='"                 . $params['firstName'] . "', "
+                        . "lastname='"                  . $params['lastName'] . "', "
+                        . "email='"                     . $params['email'] . "', "
+                        . "phone='"                     . $params['phone'] . "', "
+                        . "address1='"                  . $params['address1'] . "', "
+                        . "address2='"                  . $params['address2'] . "', "
+                        . "city='"                      . $params['city'] . "', "
+                        . "state='"                     . $params['state'] . "', "
+                        . "zipcode='"                   . $params['zipCode'] . "', " 
+                        . "emergency_contact_name='"    . $params['emergencyContactName'] . "', " 
+                        . "emergency_contact_phone='"   . $params['emergencyContactPhone'] 
+                        . "' WHERE id = $patientId";
 
                     $result = $dbConn->query($sql);
                     if ($result) {
