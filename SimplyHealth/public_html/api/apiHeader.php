@@ -14,15 +14,21 @@ set_exception_handler(function ($e) {
 // Get the request verb
 $verb = $_SERVER['REQUEST_METHOD'];
 
-// POST, PUT data
-if ($verb == 'GET') {
-    //GET requests have the form api.php/route/target
+switch($verb) {
+    case 'GET':
+    case 'PUT':
+    case 'DELETE':
+    //GET, PUT, and DELETE requests have the form api.php/target
     $url_pieces = explode('/', $_SERVER['PATH_INFO']);
-} else {
-    $params = json_decode(file_get_contents("php://input"), true);
-    if(!$params) {
-        throw new Exception("Data missing or invalid");
-    }
+}
+
+switch($verb) {
+    case 'PUT':
+    case 'POST':
+        $params = json_decode(file_get_contents("php://input"), true);
+        if(!$params) {
+            throw new Exception("Data missing or invalid");
+        }
 }
 
 // Database configuration

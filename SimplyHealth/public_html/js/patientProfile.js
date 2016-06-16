@@ -23,7 +23,7 @@ $(document).ready(function() {
 });
 
 function getMyPatientData () {
-    $.getJSON("/api/patients.php/id/"+patientData.id,
+    $.getJSON("/api/patients.php/"+patientData.id,
     function(data) {
         $("#spanAlert").html("Data retrievied for "+data.firstName + " " + data.lastName+"<br/>"+JSON.stringify(data));
     });
