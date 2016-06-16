@@ -8,72 +8,50 @@
 
         case 'POST': 
 
-            $firstName  = $dbConn->real_escape_string($params['firstName']);
-            $lastName   = $dbConn->real_escape_string($params['lastName']);
-            $email      = $dbConn->real_escape_string($params['email']);
-            $phone      = $dbConn->real_escape_string($params['phone']);
-            $address1   = $dbConn->real_escape_string($params['address1']);
-            $address2   = $dbConn->real_escape_string($params['address2']);
-            $city       = $dbConn->real_escape_string($params['city']);
-            $state      = $dbConn->real_escape_string($params['state']);
-            $zip        = $dbConn->real_escape_string($params['zip']);
-            $userid     = $dbConn->real_escape_string($params['userId']);
-            $sql = "INSERT INTO patient (userid,"
-                            . "firstname,"
-                            . "lastname,"
-                            . "email,"
-                            . "phone,"
-                            . "address1,"
-                            . "address2,"
-                            . "city,"
-                            . "state,"
-                            . "zipcode) values ("
-                            . $userid
-                            . ",'$firstName'"
-                            . ",'$lastName'"
-                            . ",'$email'"
-                            . ",'$phone'"
-                            . ",'$address1'"
-                            . ",'$address2'"
-                            . ",'$city'"
-                            . ",'$state'"
-                            . ",'$zip')";
+            $patientId          = $params['patientId'];
+            $eczemaSelfInd      = array_key_exists('eczemaSelfInd', $params) ? $dbConn->real_escape_string($params['eczemaSelfInd']) : null;
+            $highCholSelfInd    = array_key_exists('highCholSelfInd', $params) ? $dbConn->real_escape_string($params['highCholSelfInd']) : null;
+            $highBpSelfInd      = array_key_exists('highBpSelfInd', $params) ? $dbConn->real_escape_string($params['highBpSelfInd']) : null;
+            $mentalSelfInd      = array_key_exists('mentalSelfInd', $params) ? $dbConn->real_escape_string($params['mentalSelfInd']) : null;
+            $obesitySelfInd     = array_key_exists('obesitySelfInd', $params) ? $dbConn->real_escape_string($params['obesitySelfInd']) : null;
+            $sql = "INSERT INTO patient_history ("
+                            . "patient_id,"
+                            . "eczema_self_ind,"
+                            . "highchol_self_ind,"
+                            . "highbp_self_ind,"
+                            . "mental_self_ind,"
+                            . "obesity_self_ind) values ("
+                            .    $patientId
+                            . ",'$eczemaSelfInd'"
+                            . ",'$highCholSelfInd'"
+                            . ",'$highBpSelfInd'"
+                            . ",'$mentalSelfInd'"
+                            . ",'$obesitySelfInd')";
             if ($dbConn->query($sql)) {
                 // success
                 $patientId = $dbConn->insert_id;
                 $status = "201";
-                $url="api/patients.php/$patientId";
+                $url="api/patient_history.php/$patientId";
                 $header="Location: $url; Content-Type: application/json";
-                $data['id']=$patientId;
             } else {
-                $status="400";
-                $data['error']=  $dbConn->error();
-                $header="Content-Type: application/json";        
+                throw new Exception(mysqli_error($dbConn),"500");
             }
             break;
         case 'GET':
             if (!isset($url_pieces[1])) {
                 // GET all
-                $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode, "
-                    . "emergency_contact_name, emergency_contact_phone FROM patient";
+                $sql = "SELECT patient_id, eczema_self_ind, highchol_self_ind, highbp_self_ind, mental_self_ind, obesity_self_ind FROM patient_history";
                 if ($result = $dbConn->query($sql)) {
                     if ($result->num_rows > 0) {
                         $i = 0;
                         while ($row = $result->fetch_assoc()) {
                             $data[$i++] = [
-                              "id"                      => $row["id"],
-                              "userId"                  => $row["userid"],
-                              "firstName"               => $row["firstname"],
-                              "lastName"                => $row["lastname"],
-                              "email"                   => $row["email"],
-                              "phone"                   => $row["phone"],
-                              "address1"                => $row["address1"],
-                              "address2"                => $row["address2"],
-                              "city"                    => $row["city"],
-                              "state"                   => $row["state"],
-                              "zipCode"                 => $row["zipcode"],
-                              "emergencyContactName"    => $row["zipcode"],
-                              "emergencyContactPhone"   => $row["zipcode"]
+                              "patientId"       => $row["patient_id"],
+                              "eczemaSelfInd"   => $row["eczema_self_ind"],
+                              "highCholSelfInd" => $row["highchol_self_ind"],
+                              "highBpSelfInd"   => $row["highbp_self_ind"],
+                              "mentalSelfInd"   => $row["mental_self_ind"],
+                              "obesitySelfInd"  => $row["obesity_self_ind"]
                             ];
                         }
                     }
@@ -84,29 +62,22 @@
                 // GET one by id
                 $patientId = $url_pieces[1];
 
-                $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode, "
-                    . " emergency_contact_name, emergency_contact_phone FROM patient WHERE id = $patientId";
+                $sql = "SELECT patient_id, eczema_self_ind, highchol_self_ind, highbp_self_ind, mental_self_ind, obesity_self_ind "
+                    . "FROM patient_history WHERE patient_id = $patientId";
 
                 if ($result = $dbConn->query($sql)) {
                     if ($result->num_rows > 0) {
-                        $row = $result->fetch_assoc();
-
-                        $data['id']                     = $row['id'];
-                        $data['userId']                 = $row['userid'];
-                        $data['firstName']              = $row['firstname'];
-                        $data['lastName']               = $row['lastname'];
-                        $data['email']                  = $row['email'];
-                        $data['phone']                  = $row['phone'];
-                        $data['address1']               = $row['address1'];
-                        $data['address2']               = $row['address2'];
-                        $data['city']                   = $row['city'];
-                        $data['state']                  = $row['state'];
-                        $data['zipCode']                = $row['zipcode'];
-                        $data['emergencyContactName']   = $row['emergency_contact_name'];
-                        $data['emergencyContactPhone']  = $row['emergency_contact_phone'];
-
-                        $status = "200";
-                        $header="Content-Type: application/json";
+                        $i = 0;
+                        while ($row = $result->fetch_assoc()) {
+                            $data[$i++] = [
+                              "patientId"       => $row["patient_id"],
+                              "eczemaSelfInd"   => $row["eczema_self_ind"],
+                              "highCholSelfInd" => $row["highchol_self_ind"],
+                              "highBpSelfInd"   => $row["highbp_self_ind"],
+                              "mentalSelfInd"   => $row["mental_self_ind"],
+                              "obesitySelfInd"  => $row["obesity_self_ind"]
+                            ];
+                        }
                     } else {
                         // No such record in the database
                         throw new Exception("Patient not found","404");
@@ -116,6 +87,9 @@
                     throw new Exception(mysqli_error($dbConn),"500");
                 } // execute query
             } // GET route
+            $header="Content-Type: application/json";
+            $status="200";
+
             break;
         case 'PUT':
             // update the indicated id. This is the simplest update, requiring
