@@ -92,19 +92,23 @@
             if (isset($url_pieces[1])) {
                 $patientId = $url_pieces[1];
                 if (isset($params)) {
+                    $eczemaSelfInd      = array_key_exists('eczemaSelfInd', $params) ? $dbConn->real_escape_string($params['eczemaSelfInd']) : null;
+                    $highCholSelfInd    = array_key_exists('highCholSelfInd', $params) ? $dbConn->real_escape_string($params['highCholSelfInd']) : null;
+                    $highBpSelfInd      = array_key_exists('highBpSelfInd', $params) ? $dbConn->real_escape_string($params['highBpSelfInd']) : null;
+                    $mentalSelfInd      = array_key_exists('mentalSelfInd', $params) ? $dbConn->real_escape_string($params['mentalSelfInd']) : null;
+                    $obesitySelfInd     = array_key_exists('obesitySelfInd', $params) ? $dbConn->real_escape_string($params['obesitySelfInd']) : null;
 
                     $sql = "UPDATE patient_history "
-                        . "SET patient_id=[value-1], "
-                        .     "eczema_self_ind=[value-2], "
-                        .     "highchol_self_ind=[value-3], "
-                        .     "highbp_self_ind=[value-4], "
-                        .     "mental_self_ind=[value-5], "
-                        .     "obesity_self_ind=[value-6] "
+                        . "SET eczema_self_ind='$eczemaSelfInd', "
+                        .     "highchol_self_ind='$highCholSelfInd', "
+                        .     "highbp_self_ind='$highBpSelfInd', "
+                        .     "mental_self_ind='$mentalSelfInd', "
+                        .     "obesity_self_ind='$obesitySelfInd' "
                         . "WHERE patient_id = $patientId";
                     
                     $result = $dbConn->query($sql);
                     if ($result) {
-                        $header = "Location: /api/patients/$patientId";
+                        $header = "Location: /api/patient_history/$patientId";
                         $status = "204";
                     } else {
                         throw new Exception(mysqli_error($dbConn));
@@ -120,10 +124,10 @@
             // remove the indicated resource. 
             if (isset($url_pieces[1])) {
                 $patientId = $url_pieces[1];
-                $sql = "DELETE FROM patient WHERE id = $patientId";
+                $sql = "DELETE FROM patient_history WHERE id = $patientId";
 
                 if ($result = $dbConn->query($sql)) {
-                    $header = "Location: /api/patients/";
+                    $header = "Location: /api/patient_history";
                     $status = "204";
                 } else {
                     throw new Exception(mysqli_error($dbConn));

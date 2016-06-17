@@ -136,7 +136,7 @@ function putPatientHistory (event) {
 
     var ajaxSettings = new Object();
     ajaxSettings.type = method;
-    ajaxSettings.url = "/api/patient_history.php" + (method === "PUT" ? "/" + patientData.id : null);
+    ajaxSettings.url = "/api/patient_history.php" + (method === "PUT" ? "/" + patientData.id : "");
     ajaxSettings.data = JSON.stringify(patientHistoryData);
     
     $.ajax(ajaxSettings)
