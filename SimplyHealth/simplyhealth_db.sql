@@ -79,26 +79,56 @@ CREATE TABLE `users` (
 -- Table structure for table `patient`
 --
 
-CREATE TABLE `patient` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `userid` int(11) NOT NULL,
-  `firstname` varchar(50) NOT NULL,
-  `lastname` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `address1` varchar(100) NOT NULL,
-  `address2` varchar(100) DEFAULT NULL,
-  `city` varchar(25) NOT NULL,
-  `state` varchar(20) NOT NULL,
-  `zipcode` varchar(12) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `userid` (`userid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+CREATE TABLE IF NOT EXISTS patient (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  userid int(11) NOT NULL,
+  firstname varchar(50) NOT NULL,
+  lastname varchar(50) NOT NULL,
+  email varchar(50) NOT NULL,
+  address1 varchar(100) NOT NULL,
+  address2 varchar(100) DEFAULT NULL,
+  city varchar(25) NOT NULL,
+  state varchar(20) NOT NULL,
+  zipcode varchar(12) NOT NULL,
+  phone varchar(30) NOT NULL,
+  emergency_contact_name varchar(60) DEFAULT NULL,
+  emergency_contact_phone varchar(30),
+  PRIMARY KEY (id),
+  UNIQUE KEY userid (userid)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+
 
 --
 -- Constraints for table `patient`
 --
 ALTER TABLE `patient`
   ADD CONSTRAINT `patient_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`);
+  
+
+--
+-- Table structure for table 'patient_history'
+--
+
+CREATE TABLE IF NOT EXISTS patient_history (
+  patient_id int(11) NOT NULL DEFAULT '0',
+  eczema_self_ind varchar(1) DEFAULT NULL,
+  highchol_self_ind varchar(1) DEFAULT NULL,
+  highbp_self_ind varchar(1) DEFAULT NULL,
+  mental_self_ind varchar(1) DEFAULT NULL,
+  obesity_self_ind varchar(1) DEFAULT NULL,
+  PRIMARY KEY (patient_id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Constraints for table patient_history
+--
+ALTER TABLE patient_history
+  ADD CONSTRAINT patient_history_ibfk_1 FOREIGN KEY (patient_id) REFERENCES patient (id);
+  
+--
+-- Constraints for dumped tables
+--
+
 --
 -- Indexes for dumped tables
 --
