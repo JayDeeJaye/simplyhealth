@@ -123,7 +123,7 @@
                     }
 
                     $status = "204";
-                    $url="/api/patients.php/{$patient->getId()}";
+                    $url="api/patients.php/{$patient->getId()}";
                     $header="Location: $url; Content-Type: application/json";
                 } else {
                     throw new Exception("Missing data");
@@ -143,7 +143,7 @@
                     throw new Exception($exc->getMessage());
                 }
 
-                $header = "Location: /api/patients/";
+                $header = "Location: api/patients/";
                 $status = "204";
             } else {
                 throw new Exception("Missing target in ".$url_pieces);

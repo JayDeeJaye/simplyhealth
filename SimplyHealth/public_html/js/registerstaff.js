@@ -52,6 +52,21 @@ $("form").submit(function(e) {
 
     // get the roleid
     var url = "api/roles.php/" + roleName;
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      async: false,
+      data: null,
+      success: function(data) {
+        userData.roleId = data.id;
+      }
+    })
+    .fail(function(jqxhr, textStatus, error) {
+        var err = textStatus + ", " + error;
+        $( "#div_error" ).html( err + " <br> ");
+    });
+    /*
+    var url = "api/roles.php/" + roleName;
     $.getJSON(url,
     function(data) {
         userData.roleId = data.id;
@@ -60,6 +75,7 @@ $("form").submit(function(e) {
         var err = textStatus + ", " + error;
         $( "#div_error" ).html( err + " <br> ");
     });
+    */
 
     // create the user first, we'll need the id
     userData.username = userName;

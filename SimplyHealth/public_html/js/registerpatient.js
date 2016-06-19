@@ -55,9 +55,14 @@ $("form").submit(function(e) {
 
     // get the roleid
     var url = "api/roles.php/" + roleName;
-    $.getJSON(url,
-    function(data) {
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      async: false,
+      data: null,
+      success: function(data) {
         userData.roleId = data.id;
+      }
     })
     .fail(function(jqxhr, textStatus, error) {
         var err = textStatus + ", " + error;

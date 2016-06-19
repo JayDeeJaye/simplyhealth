@@ -8,11 +8,42 @@ function userLogin() {
     userData.username = $("#inputUserName").val();
     userData.password = $("#inputPassword").val();
 
+    $.ajax({
+        method: "POST",
+        url: "api/login.php",
+        async: false,
+        data: JSON.stringify(userData)
+    })
+    .done(function( data ) {
+        var rolename = (JSON.parse(data)).rolename;
+        switch (rolename) {
+            case "Admin":
+                document.getElementById("formLogin").action = "dashboardadmin.html";
+                break;
+            case "Patient":
+                document.getElementById("formLogin").action = "dashboardpatient.html";
+                break;
+            case "Nurse":
+                document.getElementById("formLogin").action = "dashboardnurse.html";
+                break;
+            case "Doctor":
+                document.getElementById("formLogin").action = "dashboarddoctor.html";
+                break;
+        }
+        return true;
+    })
+    .fail(function( jqXHR, textStatus ) {
+        alert((typeof jqxhr.responseJSON) === "undefined" ? jqxhr.responseText : jqxhr.responseJSON.error, true);
+        return false;
+    });
+
+/*
     $.post(
         "api/login.php",
         JSON.stringify(userData))
         .success(goToDashboard)
         .fail(showAjaxError);
+        */
 };
 
 function goToDashboard(data) {
