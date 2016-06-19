@@ -1,4 +1,7 @@
 <?php
+    ini_set("display_errors","1");
+    ERROR_REPORTING(E_ALL);
+
     // Set up database configuration, exception handler, request variables
     require_once('apiHeader.php');
     require_once('../php/MySQLDAOFactory.php');
@@ -46,67 +49,59 @@
             if($url_pieces[count($url_pieces)-1] == "patients.php") {
 //            if (!isset($url_pieces[1])) {
                 // GET all
-                $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode, "
-                    . "emergency_contact_name, emergency_contact_phone FROM patient";
-                if ($result = $dbConn->query($sql)) {
-                    if ($result->num_rows > 0) {
-                        $i = 0;
-                        while ($row = $result->fetch_assoc()) {
-                            $data[$i++] = [
-                              "id"                      => $row["id"],
-                              "userId"                  => $row["userid"],
-                              "firstName"               => $row["firstname"],
-                              "lastName"                => $row["lastname"],
-                              "email"                   => $row["email"],
-                              "phone"                   => $row["phone"],
-                              "address1"                => $row["address1"],
-                              "address2"                => $row["address2"],
-                              "city"                    => $row["city"],
-                              "state"                   => $row["state"],
-                              "zipCode"                 => $row["zipcode"],
-                              "emergencyContactName"    => $row["zipcode"],
-                              "emergencyContactPhone"   => $row["zipcode"]
-                            ];
-                        }
-                    }
-                } else {
-                    throw new Exception(mysqli_error($dbConn),"500");
-                }
-            } else {
-                // GET one by id
-                $patientId = $url_pieces[count($url_pieces)-1];
-
-                $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode, "
-                    . " emergency_contact_name, emergency_contact_phone FROM patient WHERE id = $patientId";
-
-                if ($result = $dbConn->query($sql)) {
-                    if ($result->num_rows > 0) {
-                        $row = $result->fetch_assoc();
-
-                        $data['id']                     = $row['id'];
-                        $data['userId']                 = $row['userid'];
-                        $data['firstName']              = $row['firstname'];
-                        $data['lastName']               = $row['lastname'];
-                        $data['email']                  = $row['email'];
-                        $data['phone']                  = $row['phone'];
-                        $data['address1']               = $row['address1'];
-                        $data['address2']               = $row['address2'];
-                        $data['city']                   = $row['city'];
-                        $data['state']                  = $row['state'];
-                        $data['zipCode']                = $row['zipcode'];
-                        $data['emergencyContactName']   = $row['emergency_contact_name'];
-                        $data['emergencyContactPhone']  = $row['emergency_contact_phone'];
-
+                try {
+                    $data = $patientDAO->findAll();
+                    if ($data === null) {
+                        throw new Exception("Not Found",404);
+                    } else {
                         $status = "200";
                         $header="Content-Type: application/json";
+                    }
+                } catch (Exception $e) {
+                    // TODO: differentiate between 404 (not found) and 500 (system error)
+                    throw new Exception($e->getMessage(),500);
+                }
+//                $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode, "
+//                    . "emergency_contact_name, emergency_contact_phone FROM patient";
+//                if ($result = $dbConn->query($sql)) {
+//                    if ($result->num_rows > 0) {
+//                        $i = 0;
+//                        while ($row = $result->fetch_assoc()) {
+//                            $data[$i++] = [
+//                              "id"                      => $row["id"],
+//                              "userId"                  => $row["userid"],
+//                              "firstName"               => $row["firstname"],
+//                              "lastName"                => $row["lastname"],
+//                              "email"                   => $row["email"],
+//                              "phone"                   => $row["phone"],
+//                              "address1"                => $row["address1"],
+//                              "address2"                => $row["address2"],
+//                              "city"                    => $row["city"],
+//                              "state"                   => $row["state"],
+//                              "zipCode"                 => $row["zipcode"],
+//                              "emergencyContactName"    => $row["zipcode"],
+//                              "emergencyContactPhone"   => $row["zipcode"]
+//                            ];
+//                        }
+//                    }
+//                } else {
+//                    throw new Exception(mysqli_error($dbConn),"500");
+//                }
+            } else {
+                // GET one by id
+                $patientId = $url_pieces[1];
+                try {
+                    $data = $patientDAO->findById($patientId);
+                    if ($data === null) {
+                        throw new Exception("Not Found",404);
                     } else {
-                        // No such record in the database
-                        throw new Exception("Patient not found","404");
-                    } // fetch patient
-                    $result->close();
-                } else {
-                    throw new Exception(mysqli_error($dbConn),"500");
-                } // execute query
+                        $status = "200";
+                        $header="Content-Type: application/json";
+                    }
+                } catch (Exception $e) {
+                    // TODO: differentiate between 404 (not found) and 500 (system error)
+                    throw new Exception($e->getMessage(),500);
+                }
             } // GET route
             break;
         case 'PUT':
