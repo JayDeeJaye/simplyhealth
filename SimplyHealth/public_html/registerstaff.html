@@ -18,8 +18,6 @@ and open the template in the editor.
 
         <!-- Custom styles for this template -->
         <link href="css/custom.css" rel="stylesheet">
-
-        <script src="js/registerstaff.js"></script>
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -36,49 +34,57 @@ and open the template in the editor.
                 <div class="col-sm-6 col-sm-offset-1">
                     <br>
                     <br>
-                    <h4 class="form-signin-heading text-center">Register Staff Form</h4>
+                    <div class="alert-danger" id="div_error"></div>
+                    <div class="alert-info" id="div_info"></div>
+                    <h4 class="form-signin-heading text-center">Register New Staff Form</h4>
                     <br>
-                    <form class="form-horizontal" id="formRegisterStaff" name="formRegisterStaff" method="post" action="login.html" onsubmit="return registerstaff()">
+                    <form name="signupForm" class="form-horizontal" role="form" action="login.html" >
                         <div class="form-group">
                             <label class="col-sm-5 control-label no-padding-right" for="inputFirstName">First Name</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="inputFirstName" name="fName" placeholder="First Name" required autofocus>
+                                <input type="text" class="form-control" id="inputFirstName" name="fName" placeholder="First Name"  autofocus>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-5 control-label no-padding-right" for="inputLastName">Last Name</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="inputLastName" name="lName" placeholder="Last Name" required autofocus>
+                                <input type="text" class="form-control" id="inputLastName" name="lName" placeholder="Last Name"  autofocus>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-5 control-label no-padding-right" for="inputEmail">Email</label>
                             <div class="col-sm-7">
-                                <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email" required>
+                                <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label no-padding-right" for="inputPhone">Phone Number</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="inputPhone" name="phone" placeholder="Phone" >
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-5 control-label no-padding-right" for="inputUserName">Username</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="inputUserName" name="username" placeholder="Username" required>
+                                <input type="text" class="form-control" id="inputUserName" name="username" placeholder="Username" >
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-5 control-label no-padding-right" for="inputPassword">Password</label>
                             <div class="col-sm-7">
-                                <input type="password" class="form-control" id="inputPassword" name="pwd" placeholder="***********" required>
+                                <input type="password" class="form-control" id="inputPassword" name="pwd" placeholder="***********" >
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-5 control-label no-padding-right" for="inputConfirmPassword">Confirm Password</label>
                             <div class="col-sm-7">
-                                <input type="password" class="form-control" id="inputConfirmPassword" name="confirmPwd" placeholder="***********" required>
+                                <input type="password" class="form-control" id="inputConfirmPassword" name="confirmPwd" placeholder="***********" >
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-5 control-label no-padding-right" for="inputAddress1">Address 1</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="inputAddress1" name="address1" placeholder="Address 1" required>
+                                <input type="text" class="form-control" id="inputAddress1" name="address1" placeholder="Address 1" >
                             </div>
                         </div>
                         <div class="form-group">
@@ -90,27 +96,27 @@ and open the template in the editor.
                         <div class="form-group">
                             <label class="col-sm-5 control-label no-padding-right" for="inputCity">City</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="inputCity" name="city" placeholder="City" required>
+                                <input type="text" class="form-control" id="inputCity" name="city" placeholder="City" >
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-5 control-label no-padding-right" for="inputState">State</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="inputState" name="state" placeholder="State" required>
+                                <input type="text" class="form-control" id="inputState" name="state" placeholder="State" >
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-5 control-label no-padding-right" for="inputZipcode">Zipcode</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="inputZipcode" name="zipcode" placeholder="Zipcode" required>
+                                <input type="text" class="form-control" id="inputZipcode" name="zipcode" placeholder="Zipcode" >
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-5 control-label no-padding-right" for="radioRole">Role</label>
+                            <label class="col-sm-5 control-label no-padding-right" for="role">Role</label>
                             <div class="col-sm-7">
-                                <label class="radio-inline"><input type="radio" name="optradio">Admin</label>
-                                <label class="radio-inline"><input type="radio" name="optradio">Nurse</label>
-                                <label class="radio-inline"><input type="radio" name="optradio">Doctor</label>
+                                <label class="radio-inline"><input type="radio" value="Admin" name="role">Admin</label>
+                                <label class="radio-inline"><input type="radio" value="Nurse" name="role">Nurse</label>
+                                <label class="radio-inline"><input type="radio" value="Doctor" name="role">Doctor</label>
                             </div>
                         </div>
                         <div class="form-group">
@@ -123,10 +129,8 @@ and open the template in the editor.
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')</script>
-        <script src="js/bootstrap.min.js"></script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/registerstaff.js"></script>
     </body>
 </html>

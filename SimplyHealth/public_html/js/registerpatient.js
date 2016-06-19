@@ -10,6 +10,7 @@ $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
 
 var patientData = new Object(); 
 var patientForm;
+var userData = new Object();
 
 $("form").submit(function(e) {
     e.preventDefault();
@@ -20,6 +21,24 @@ $("form").submit(function(e) {
     var pwd = $("#inputPassword").val();
     var confirmpwd =$("#inputConfirmPassword").val();
 
+    if(pwd !== confirmpwd) {
+        var passwordField = $("#inputPassword");
+        var conifrmPasswordField = $("#inputConfirmPassword");
+        passwordField.val('');
+        conifrmPasswordField.val('');
+
+        $( "#div_error" ).html( "Password does not match! <br> ");
+
+        return false;
+    } else if (pwd == "" || confirmpwd == "") {
+        var passwordField = $("#inputPassword");
+        var conifrmPasswordField = $("#inputConfirmPassword");
+        passwordField.val('');
+        conifrmPasswordField.val('');
+
+        $( "#div_error" ).html( "Password cannot be NULL! <br> ");        
+    }
+
     patientData.firstName = $("#inputFirstName").val();
     patientData.lastName = $("#inputLastName").val();
     patientData.email = $("#inputEmail").val();
@@ -29,14 +48,35 @@ $("form").submit(function(e) {
     patientData.city = $("#inputCity").val();
     patientData.state = $("#inputState").val();
     patientData.zip = $("#inputZipcode").val();
+    patientData.emergencyContactName = $("#inputEmergencyName").val();
+    patientData.emergencyContactPhone = $("#inputEmergencyPhone").val();
+
+    var roleName = "Patient";
+
+    // get the roleid
+    var url = "api/roles.php/" + roleName;
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      async: false,
+      data: null,
+      success: function(data) {
+        userData.roleId = data.id;
+      }
+    })
+    .fail(function(jqxhr, textStatus, error) {
+        var err = textStatus + ", " + error;
+        $( "#div_error" ).html( err + " <br> ");
+    });
 
     // create the user first, we'll need the id
-   var userData = { username: userName, password: pwd };
-   $.post("/api/users.php",
+    userData.username = userName;
+    userData.password = pwd;
+    $.post("api/users.php",
         JSON.stringify(userData),
         userSuccess,
         "json");
-    
+            
 });
 
 function userSuccess (data) {
@@ -44,7 +84,7 @@ function userSuccess (data) {
     // Add the patient info for the user.
     patientData.userId = data.id;
 
-    $.post("/api/patients.php",
+    $.post("api/patients.php",
         JSON.stringify(patientData),
         patientSuccess,
         "json");

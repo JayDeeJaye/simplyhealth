@@ -38,7 +38,7 @@ and open the template in the editor.
                     <div class="alert-info" id="div_info"></div>
                     <h4 class="form-signin-heading text-center">Register New Patient Form</h4>
                     <br>
-                    <form name="signupForm" class="form-horizontal" role="form" action="loginPatient.html" >
+                    <form name="signupForm" class="form-horizontal" role="form" action="login.html" >
                         <div class="form-group">
                             <label class="col-sm-5 control-label no-padding-right" for="inputFirstName">First Name</label>
                             <div class="col-sm-7">
@@ -112,6 +112,18 @@ and open the template in the editor.
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-5 control-label no-padding-right" for="inputEmergencyName">Emergency Contact Name</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="inputEmergencyName" name="emergencyname" placeholder="Emergency Contact Name" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label no-padding-right" for="inputEmergencyPhone">Emergency Contact Number</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="inputEmergencyPhone" name="emergencyphone" placeholder="Emergency Contact Phone" >
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <button class="btn btn-lg btn-primary center-block" type="submit">Register Patient</button>
                         </div>
                     </form>
@@ -121,11 +133,8 @@ and open the template in the editor.
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>');</script>
-        <script src="js/bootstrap.min.js"></script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
         <script src="js/registerpatient.js"></script>
     </body>
 </html>

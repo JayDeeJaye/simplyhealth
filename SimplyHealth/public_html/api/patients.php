@@ -1,56 +1,50 @@
 <?php
     // Set up database configuration, exception handler, request variables
     require_once('apiHeader.php');
+    require_once('../php/MySQLDAOFactory.php');
+    require_once('../php/PatientDTO.php');
 
-    $dbConn = new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
+    function getData($inData) {
+        $p = new PatientDTO();
 
+        $p->setFirstName($inData['firstName']);
+        $p->setLastName($inData['lastName']);
+        $p->setEmail($inData['email']);
+        $p->setPhone($inData['phone']);
+        $p->setAddress1($inData['address1']);
+        $p->setAddress2($inData['address2']);
+        $p->setCity($inData['city']);
+        $p->setState($inData['state']);
+        $p->setZipCode($inData['zip']);
+        $p->setUserId($inData['userId']);
+        $p->setEmergencyContactName($inData['emergencyContactName']);
+        $p->setEmergencyContactPhone($inData['emergencyContactPhone']);
+        
+        return $p;
+    }
+
+    $myDAOFactory = DAOFactory::getDAOFactory(DAOFactory::DB_MYSQL);
+    $patientDAO = $myDAOFactory->getPatientDAO();
+    
     switch($verb) {
 
         case 'POST': 
-
-            $firstName  = $dbConn->real_escape_string($params['firstName']);
-            $lastName   = $dbConn->real_escape_string($params['lastName']);
-            $email      = $dbConn->real_escape_string($params['email']);
-            $phone      = $dbConn->real_escape_string($params['phone']);
-            $address1   = $dbConn->real_escape_string($params['address1']);
-            $address2   = $dbConn->real_escape_string($params['address2']);
-            $city       = $dbConn->real_escape_string($params['city']);
-            $state      = $dbConn->real_escape_string($params['state']);
-            $zip        = $dbConn->real_escape_string($params['zip']);
-            $userid     = $dbConn->real_escape_string($params['userId']);
-            $sql = "INSERT INTO patient (userid,"
-                            . "firstname,"
-                            . "lastname,"
-                            . "email,"
-                            . "phone,"
-                            . "address1,"
-                            . "address2,"
-                            . "city,"
-                            . "state,"
-                            . "zipcode) values ("
-                            . $userid
-                            . ",'$firstName'"
-                            . ",'$lastName'"
-                            . ",'$email'"
-                            . ",'$phone'"
-                            . ",'$address1'"
-                            . ",'$address2'"
-                            . ",'$city'"
-                            . ",'$state'"
-                            . ",'$zip')";
-            if ($dbConn->query($sql)) {
-                // success
-                $patientId = $dbConn->insert_id;
-                $status = "201";
-                $url="api/patients.php/$patientId";
-                $header="Location: $url; Content-Type: application/json";
-                $data['id']=$patientId;
-            } else {
-                throw new Exception(mysqli_error($dbConn));
+            $patient = getData($params);
+            
+            try {
+                $patientDAO->create($patient);
+            } catch (Exception $exc) {
+                throw new Exception($exc->getMessage());
             }
+
+            $status = "201";
+            $url="api/patients.php/{$patient->getId()}";
+            $header="Location: $url; Content-Type: application/json";
+            $data['id']=$patient->getId();
             break;
         case 'GET':
-            if (!isset($url_pieces[1])) {
+            if($url_pieces[count($url_pieces)-1] == "patients.php") {
+//            if (!isset($url_pieces[1])) {
                 // GET all
                 $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode, "
                     . "emergency_contact_name, emergency_contact_phone FROM patient";
@@ -80,7 +74,7 @@
                 }
             } else {
                 // GET one by id
-                $patientId = $url_pieces[1];
+                $patientId = $url_pieces[count($url_pieces)-1];
 
                 $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode, "
                     . " emergency_contact_name, emergency_contact_phone FROM patient WHERE id = $patientId";
@@ -119,30 +113,18 @@
             // update the indicated id. This is the simplest update, requiring
             // all data. TODO: implement PATCH, update a subset of columns
             if (isset($url_pieces[1])) {
-                $patientId = $url_pieces[1];
                 if (isset($params)) {
-                    $sql = "UPDATE patient SET "
-                        . "userid="                     . $params['userId'] . ", "
-                        . "firstname='"                 . $params['firstName'] . "', "
-                        . "lastname='"                  . $params['lastName'] . "', "
-                        . "email='"                     . $params['email'] . "', "
-                        . "phone='"                     . $params['phone'] . "', "
-                        . "address1='"                  . $params['address1'] . "', "
-                        . "address2='"                  . $params['address2'] . "', "
-                        . "city='"                      . $params['city'] . "', "
-                        . "state='"                     . $params['state'] . "', "
-                        . "zipcode='"                   . $params['zipCode'] . "', " 
-                        . "emergency_contact_name='"    . $params['emergencyContactName'] . "', " 
-                        . "emergency_contact_phone='"   . $params['emergencyContactPhone'] 
-                        . "' WHERE id = $patientId";
+                    $patient = getData($params);
+                    $patient->setId($url_pieces[1]);
+                    try {
+                        $patientDAO->update($patient);
+                    } catch (Exception $exc) {
+                        throw new Exception($exc->getMessage());
+                    }
 
-                    $result = $dbConn->query($sql);
-                    if ($result) {
-                        $header = "Location: /api/patients/$patientId";
-                        $status = "204";
-                    } else {
-                        throw new Exception(mysqli_error($dbConn));
-                    } // execute query
+                    $status = "204";
+                    $url="api/patients.php/{$patient->getId()}";
+                    $header="Location: $url; Content-Type: application/json";
                 } else {
                     throw new Exception("Missing data");
                 }
@@ -154,14 +136,15 @@
             // remove the indicated resource. 
             if (isset($url_pieces[1])) {
                 $patientId = $url_pieces[1];
-                $sql = "DELETE FROM patient WHERE id = $patientId";
+                
+                try {
+                    $patientDAO->delete($patientId);
+                } catch (Exception $exc) {
+                    throw new Exception($exc->getMessage());
+                }
 
-                if ($result = $dbConn->query($sql)) {
-                    $header = "Location: /api/patients/";
-                    $status = "204";
-                } else {
-                    throw new Exception(mysqli_error($dbConn));
-                } // execute query
+                $header = "Location: api/patients/";
+                $status = "204";
             } else {
                 throw new Exception("Missing target in ".$url_pieces);
             }
@@ -171,7 +154,6 @@
     }
     // send the response
     
-    $dbConn->close();
     header($header,null,$status);
     if (isset($data)) {
         echo json_encode($data);
