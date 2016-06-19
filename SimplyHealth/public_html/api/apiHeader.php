@@ -3,9 +3,6 @@
 // Common exception handler, returns an error  response with the message in it
 set_exception_handler(function ($e) {
 	$code = $e->getCode() ?: 400;
-        if (isset($dbConn)) {
-            $dbConn->close();
-        }
 	header("Content-Type: application/json", NULL, $code);
 	echo json_encode(["error" => $e->getMessage()]);
 	exit;
@@ -19,7 +16,9 @@ switch($verb) {
     case 'PUT':
     case 'DELETE':
     //GET, PUT, and DELETE requests have the form api.php/target
-    $url_pieces = explode('/', $_SERVER['REQUEST_URI']);
+
+    $my_path_info = str_replace($_SERVER['SCRIPT_NAME'],'',$_SERVER['REQUEST_URI']);
+    $url_pieces = explode('/', $my_path_info);
 }
 
 switch($verb) {
