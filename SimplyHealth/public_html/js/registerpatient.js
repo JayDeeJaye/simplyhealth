@@ -48,6 +48,8 @@ $("form").submit(function(e) {
     patientData.city = $("#inputCity").val();
     patientData.state = $("#inputState").val();
     patientData.zip = $("#inputZipcode").val();
+    patientData.emergencyContactName = $("#inputEmergencyName").val();
+    patientData.emergencyContactPhone = $("#inputEmergencyPhone").val();
 
     var roleName = "Patient";
 
