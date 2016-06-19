@@ -64,7 +64,7 @@
                 }
             } else {
                 // GET one by id
-                $patientId = $url_pieces[1];
+                $patientId = $url_pieces[count($url_pieces) - 1];
 
                 $sql = "SELECT patient_id, eczema_self_ind, highchol_self_ind, highbp_self_ind, mental_self_ind, obesity_self_ind "
                     . "FROM patient_history WHERE patient_id = $patientId";
@@ -108,7 +108,7 @@
                     
                     $result = $dbConn->query($sql);
                     if ($result) {
-                        $header = "Location: /api/patient_history/$patientId";
+                        $header = "Location: api/patient_history/$patientId";
                         $status = "204";
                     } else {
                         throw new Exception(mysqli_error($dbConn));
@@ -127,7 +127,7 @@
                 $sql = "DELETE FROM patient_history WHERE id = $patientId";
 
                 if ($result = $dbConn->query($sql)) {
-                    $header = "Location: /api/patient_history";
+                    $header = "Location: api/patient_history";
                     $status = "204";
                 } else {
                     throw new Exception(mysqli_error($dbConn));

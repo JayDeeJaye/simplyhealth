@@ -4,38 +4,37 @@
  * and open the template in the editor.
  */
 function userLogin() {
-    var username = document.getElementById('inputUserName').value;
-    var pwd = document.getElementById('inputPassword').value;
+    var userData = new Object();
+    userData.username = $("#inputUserName").val();
+    userData.password = $("#inputPassword").val();
 
-    var loginUserURL = "php/UserFunctions.php?username=" + username + "&password=" + pwd + "&action=login";
-    var result = false;
-    var message = "";
-    $.ajax({
-        url:loginUserURL,
-        async: false,
-        success: function (response) {
-            var json = JSON.parse(response);
-            if(json.success == 0) {
-                result = true;
-            }
-            else {
-                result = false;
-            }
-            message = json.message;
-        },
-        error: function () {
-            alert("Error: Unable to login the user!");
-            result = false;
-        }
-    });
-    alert(message);
-    if(result == true) {
-        location.href = "dashboardadmin.html?username=" + username;
-        return true;
-    } else {
-        return false;
-    }
+    $.post(
+        "api/login.php",
+        JSON.stringify(userData))
+        .success(goToDashboard)
+        .fail(showAjaxError);
 };
 
+function goToDashboard(data) {
+    var rolename = (JSON.parse(data)).rolename;
 
+    switch (rolename) {
+        case "Admin":
+            document.getElementById("formLogin").action = "dashboardadmin.html";
+            break;
+        case "Patient":
+            document.getElementById("formLogin").action = "dashboardpatient.html";
+            break;
+        case "Nurse":
+            document.getElementById("formLogin").action = "dashboardnurse.html";
+            break;
+        case "Doctor":
+            document.getElementById("formLogin").action = "dashboarddoctor.html";
+            break;
+    }
+}
 
+function showAjaxError (jqxhr, textStatus, thrownError) {
+    alert((typeof jqxhr.responseJSON) === "undefined" ? jqxhr.responseText : jqxhr.responseJSON.error, true);
+    return false;
+}

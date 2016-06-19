@@ -19,7 +19,6 @@ and open the template in the editor.
         <!-- Custom styles for this template -->
         <link href="css/custom.css" rel="stylesheet">
 
-        <script src="js/login.js"></script>
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -32,7 +31,7 @@ and open the template in the editor.
           </div>
         </div>
         <div class="page-content">
-            <form class="form-horizontal form-signin" id="formLogin" name="formLogin" method="post" action="dashboardadmin.html" onsubmit="return userLogin()">
+            <form class="form-horizontal form-signin" id="formLogin" name="formLogin" method="post" onsubmit="return userLogin()" >
                 <div class="control-group">
                     <label class="control-label" for="inputUserName"><span class="glyphicon glyphicon-user"></span> Username</label>
                     <div class="controls">
@@ -48,7 +47,7 @@ and open the template in the editor.
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
                 <br>
                 <div style="text-align: center">
-                    Don't have an account? <a href="registerstaff.html">Signup Staff</a>
+                    Don't have an account? <a href="registerstaff.html">Signup New Staff</a>
                     <br> Or <a href="registerpatient.html">Signup New Patient</a>
                 </div>
                 <br>
@@ -57,10 +56,8 @@ and open the template in the editor.
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')</script>
-        <script src="js/bootstrap.min.js"></script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/login.js"></script>
     </body>
 </html>

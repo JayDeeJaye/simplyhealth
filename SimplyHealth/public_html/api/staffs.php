@@ -1,12 +1,9 @@
 <?php
     // Set up database configuration, exception handler, request variables
     require_once('apiHeader.php');
-    require_once('SessionFunctions.php');
 
     $dbConn = new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
 
-    $sessionObj = new SessionClass();
-    
     switch($verb) {
 
         case 'POST': 
@@ -21,7 +18,7 @@
             $state      = $dbConn->real_escape_string($params['state']);
             $zip        = $dbConn->real_escape_string($params['zip']);
             $userid     = $dbConn->real_escape_string($params['userId']);
-            $sql = "INSERT INTO patient (userid,"
+            $sql = "INSERT INTO staffs (userid,"
                             . "firstname,"
                             . "lastname,"
                             . "email,"
@@ -43,21 +40,20 @@
                             . ",'$zip')";
             if ($dbConn->query($sql)) {
                 // success
-                $patientId = $dbConn->insert_id;
+                $staffId = $dbConn->insert_id;
                 $status = "201";
-                $url="api/patients.php/$patientId";
+                $url="api/staffs.php/$staffId";
                 $header="Location: $url; Content-Type: application/json";
-                $data['id']=$patientId;
+                $data['id']=$staffId;
             } else {
                 throw new Exception(mysqli_error($dbConn));
             }
             break;
         case 'GET':
-            if($url_pieces[count($url_pieces)-1] == "patients.php") {
-//            if (!isset($url_pieces[1])) {
+            if (!isset($url_pieces[1])) {
                 // GET all
-                $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode, "
-                    . "emergency_contact_name, emergency_contact_phone FROM patient";
+                $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode "
+                    . "FROM staffs";
                 if ($result = $dbConn->query($sql)) {
                     if ($result->num_rows > 0) {
                         $i = 0;
@@ -84,10 +80,10 @@
                 }
             } else {
                 // GET one by id
-                $patientId = $url_pieces[count($url_pieces)-1];
+                $staffId = $url_pieces[1];
 
-                $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode, "
-                    . " emergency_contact_name, emergency_contact_phone FROM patient WHERE id = $patientId";
+                $sql = "SELECT id, userid, firstname, lastname, email, phone, address1, address2, city, state, zipcode "
+                    . "FROM staffs WHERE id = $staffId";
 
                 if ($result = $dbConn->query($sql)) {
                     if ($result->num_rows > 0) {
@@ -104,15 +100,13 @@
                         $data['city']                   = $row['city'];
                         $data['state']                  = $row['state'];
                         $data['zipCode']                = $row['zipcode'];
-                        $data['emergencyContactName']   = $row['emergency_contact_name'];
-                        $data['emergencyContactPhone']  = $row['emergency_contact_phone'];
 
                         $status = "200";
                         $header="Content-Type: application/json";
                     } else {
                         // No such record in the database
-                        throw new Exception("Patient not found","404");
-                    } // fetch patient
+                        throw new Exception("Staff not found","404");
+                    } // fetch staff
                     $result->close();
                 } else {
                     throw new Exception(mysqli_error($dbConn),"500");
@@ -122,11 +116,10 @@
         case 'PUT':
             // update the indicated id. This is the simplest update, requiring
             // all data. TODO: implement PATCH, update a subset of columns
-            if($url_pieces[count($url_pieces)-1] != "patients.php") {
-//            if (isset($url_pieces[1])) {
-                $patientId = $url_pieces[count($url_pieces)-1];
+            if (isset($url_pieces[1])) {
+                $staffId = $url_pieces[1];
                 if (isset($params)) {
-                    $sql = "UPDATE patient SET "
+                    $sql = "UPDATE staffs SET "
                         . "userid="                     . $params['userId'] . ", "
                         . "firstname='"                 . $params['firstName'] . "', "
                         . "lastname='"                  . $params['lastName'] . "', "
@@ -136,14 +129,12 @@
                         . "address2='"                  . $params['address2'] . "', "
                         . "city='"                      . $params['city'] . "', "
                         . "state='"                     . $params['state'] . "', "
-                        . "zipcode='"                   . $params['zipCode'] . "', " 
-                        . "emergency_contact_name='"    . $params['emergencyContactName'] . "', " 
-                        . "emergency_contact_phone='"   . $params['emergencyContactPhone'] 
-                        . "' WHERE id = $patientId";
+                        . "zipcode='"                   . $params['zipCode']
+                        . "' WHERE id = $staffId";
 
                     $result = $dbConn->query($sql);
                     if ($result) {
-                        $header = "Location: api/patients/$patientId";
+                        $header = "Location: api/staffs/$staffId";
                         $status = "204";
                     } else {
                         throw new Exception(mysqli_error($dbConn));
@@ -157,13 +148,12 @@
             break;
         case 'DELETE':
             // remove the indicated resource. 
-            if($url_pieces[count($url_pieces)-1] != "patients.php") {
-            //if (isset($url_pieces[1])) {
-                $patientId = $url_pieces[count($url_pieces)-1];
-                $sql = "DELETE FROM patient WHERE id = $patientId";
+            if (isset($url_pieces[1])) {
+                $staffId = $url_pieces[1];
+                $sql = "DELETE FROM staffs WHERE id = $staffId";
 
                 if ($result = $dbConn->query($sql)) {
-                    $header = "Location: api/patients/";
+                    $header = "Location: api/staffs/";
                     $status = "204";
                 } else {
                     throw new Exception(mysqli_error($dbConn));

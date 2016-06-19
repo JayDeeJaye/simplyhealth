@@ -19,7 +19,7 @@ switch($verb) {
     case 'PUT':
     case 'DELETE':
     //GET, PUT, and DELETE requests have the form api.php/target
-    $url_pieces = explode('/', $_SERVER['PATH_INFO']);
+    $url_pieces = explode('/', $_SERVER['REQUEST_URI']);
 }
 
 switch($verb) {

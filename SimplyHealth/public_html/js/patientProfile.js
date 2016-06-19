@@ -20,7 +20,7 @@ $(document).ready(function() {
     $("#updEmergencyContact").click(putPatientData);
     $("#updHistory").click(putPatientHistory);
 
-    $.getJSON("/api/users.php/me",
+    $.getJSON("api/users.php/me",
       function(data) {
           patientData.id = data.patient.id;
           patientData.firstName = data.patient.firstName;
@@ -51,7 +51,7 @@ function showAlert (message,isError) {
 
 function getMyPatientData (event) {
     $.getJSON(
-        "/api/patients.php/"+patientData.id,
+        "api/patients.php/"+patientData.id,
         function(data) {
             //$("#spanAlert").html("Data retrievied for "+data.firstName + " " + data.lastName+"<br/>"+JSON.stringify(data));
             patientData = JSON.parse(JSON.stringify(data));
@@ -74,7 +74,7 @@ function getMyPatientData (event) {
 function getMyHistoryData (event) {
     $.ajax({
         type: "GET",
-        url: "/api/patient_history.php/"+patientData.id,
+        url: "api/patient_history.php/"+patientData.id,
         success: function(data) {
             //$("#spanAlert").html("Data retrievied for "+data.firstName + " " + data.lastName+"<br/>"+JSON.stringify(data));
             patientHistoryData = JSON.parse(JSON.stringify(data));
@@ -111,7 +111,7 @@ function putPatientData (event) {
     //alert(JSON.stringify(patientData));
     $.ajax({
         type: "PUT",
-        url: "/api/patients.php/"+patientData.id,
+        url: "api/patients.php/"+patientData.id,
         data: JSON.stringify(patientData),
         success: function(data,status,jqxhr) {
             showAlert("Your profile has been updated",false);
@@ -136,7 +136,7 @@ function putPatientHistory (event) {
 
     var ajaxSettings = new Object();
     ajaxSettings.type = method;
-    ajaxSettings.url = "/api/patient_history.php" + (method === "PUT" ? "/" + patientData.id : "");
+    ajaxSettings.url = "api/patient_history.php" + (method === "PUT" ? "/" + patientData.id : "");
     ajaxSettings.data = JSON.stringify(patientHistoryData);
     
     $.ajax(ajaxSettings)

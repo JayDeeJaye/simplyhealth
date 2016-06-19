@@ -1,27 +1,49 @@
 <?php
 
 require_once('apiHeader.php');
+require_once('SessionFunctions.php');
 
 // Open a connection to the database
 $dbConn= new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
+$sessionObj = new SessionClass();
 
 if ($verb == 'POST') {
-    // Add the user to the database
+
+    // check the user and paswword in the users table
     $username = mysqli_real_escape_string($dbConn,$params['username']);
     $password = mysqli_real_escape_string($dbConn,$params['password']);
-    $roleid = mysqli_real_escape_string($dbConn,$params['roleId']);
-    $sql ="INSERT INTO users (username,password, roleid) values ('$username','$password', '$roleid')";
+    $sql = "Select username, password, roleid FROM users where username='$username'"; 
 
-    if ($dbConn->query($sql)) {
-        // success
-        $userId = $dbConn->insert_id;
-        $status = "201";
-        $url="api/users.php/$userId";
-        $header="Location: api/users.php/$userId; Content-Type: application/json";
-        $data['id']=$userId;
+    if ($result = $dbConn->query($sql)) {
+
+        $row = $result->fetch_array(MYSQLI_ASSOC);
+        if(($username == $row['username']) && ($password == $row['password']))
+        {
+            if ($sessionObj->isUserLoggedIn($username)){
+                $sessionObj->userLogout();
+            }
+            $sessionObj->userLogin($username);
+            $rowid = $row['roleid'];
+            $sql = "Select rolename FROM roles where id=$rowid"; 
+            
+            if ($result = $dbConn->query($sql)) {
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+                $rolename = $row['rolename'];
+                $status = "201";
+                $url="api/login.php/$rolename";
+                $header="Location: api/login.php/$username; Content-Type: application/json";
+                $data['rolename'] = $rolename;
+                $data['username'] = $username;
+            } else {
+                throw new Exception($sql,"404");
+            }
+        } else {
+            throw new Exception("Username or Password does not match!","404");
+        }
     } else {
         throw new Exception(mysqli_error($dbConn),"400");
     }
+
 } else if ($verb == 'GET') {
     if ($url_pieces[1] == "me") {
         // Get the current user and info
