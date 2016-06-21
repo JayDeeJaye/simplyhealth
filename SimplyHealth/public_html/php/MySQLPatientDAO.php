@@ -32,12 +32,18 @@ class MySQLPatientDAO implements patientDAO {
              ) 
         VALUES (?,'?','?','?','?','?','?','?','?','?','?','?')
 SQL;
+//    const SQL_FIND_ALL = <<<SQL
+//        SELECT  id,userid,firstname,lastname,email,
+//                phone,address1,address2,
+//                city,state,zipcode,
+//                emergency_contact_name,
+//                emergency_contact_phone
+//        FROM patient
+//SQL;
     const SQL_FIND_ALL = <<<SQL
-        SELECT  id,userid,firstname,lastname,email,
-                phone,address1,address2,
-                city,state,zipcode,
-                emergency_contact_name,
-                emergency_contact_phone
+        SELECT id, userid, firstname, lastname, email, address1, address2,
+               city, state, zipcode, phone, emergency_contact_name,
+               emergency_contact_phone
         FROM patient
 SQL;
     const SQL_FIND_BY_ID = <<<SQL
@@ -71,13 +77,9 @@ SQL;
     public function __destruct() {
         if (isset($this->dbConn)){
             $this->dbConn->close();
+            unset($this);
         }
     }
-
-    public function __unset($name) {
-        
-    }
-
     
     public function create(PatientDTO $patient) {
         $values = $this->setValues($patient);
@@ -104,23 +106,25 @@ SQL;
         $this->dbConn = MySQLDAOFactory::createConnection();
         $sql = self::SQL_FIND_ALL;
         $data = [];
-        if ($result = $this->dbConn->query($sql)) {
-            while ($row = $result->fetch_assoc()) {
-                array_push($data, $this->mapRsData($row));
-            }
-            return $data;
-        } else {
-            throw new Exception(mysqli_error($this->dbConn));
-        }               
+        try {
+            $result = $this->dbConn->query($sql);
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+        while ($row = $result->fetch_assoc()) {
+            array_push($data, $this->mapRsData($row));
+        }
+        return $data;
     }
 
     public function findById($patientId) {
         $this->dbConn = MySQLDAOFactory::createConnection();
         $sql = MySQLHelper::prepareSQL(self::SQL_FIND_BY_ID, array($patientId));
         if ($result = $this->dbConn->query($sql)) {
-            $row = $result->fetch_assoc();
-            $data = $this->mapRsData($row);
-            return $data;
+            if ($row = $result->fetch_assoc()) {
+                $data = $this->mapRsData($row);
+                return $data;
+            }
         } else {
             throw new Exception(mysqli_error($this->dbConn));
         }               
