@@ -18,7 +18,16 @@ $(document).ready(function() {
     $("#refreshTodayAppts").click(getTodayAppts);
     $("#refreshPendingAppts").click(getPendingAppts);
     $("#confirmAppt").click(confirmAppt);
- 
+    $('.form_datetime').datetimepicker({
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
+    
     var staffData = new Object();
     $.getJSON("api/login.php/whoami",
     function(data) {
@@ -56,15 +65,15 @@ function getTodayAppts(event) {
         todayApptData = JSON.parse(JSON.stringify(data));
         for(var i = 0; i < todayApptData.length; i++) {
             curApptData = todayApptData[i];
-            addRowIntoTodayTable();
-            $(".BtnCheckIn").click(updateCheckInInfo);
-            $(".BtnCheckOut").click(updateCheckOutInfo);
+            addRowIntoTodayTable(i);
         }
     })
     .fail(showAjaxError);
+    $("#todayApptTable").on("click", ".BtnCheckIn", updateCheckInInfo);
+    $("#todayApptTable").on("click", ".BtnCheckOut", updateCheckOutInfo);
 }
 
-function addRowIntoTodayTable() {
+function addRowIntoTodayTable(i) {
     var checkinHtml = '<td width="10%" class="textCheckIn"><input type="button" class="btn btn-primary BtnCheckIn" value="Check-in" /></td>';
     var checkoutHtml = '<td width="10%" class="textCheckOut"><input type="button" class="btn btn-primary BtnCheckOut" value="Check-out" disabled /></td>';
     if(curApptData.check_in != null) {
@@ -93,25 +102,27 @@ function getPendingAppts(event) {
         pendingApptData = JSON.parse(JSON.stringify(data));
         for(var i = 0; i < pendingApptData.length; i++) {
             curPendingApptData = pendingApptData[i];
-            addRowIntoPendingTable();
-            $(".BtnConfirm").click(confirmPendingAppt);
+            addRowIntoPendingTable(i);
         }
     })
     .fail(showAjaxError);
+    $("#pendingApptTable").on("click", ".BtnConfirm", confirmPendingAppt);
 }
 
-function addRowIntoPendingTable() {
+function addRowIntoPendingTable(i) {
     var html = '<tr>' +
-                '<td width="15%">' + curPendingApptData.date + '</td>' +
-                '<td width="20%">' + curPendingApptData.patient_name + '</td>' +
-                '<td width="20%">' + curPendingApptData.doctor_name + '</td>' +
-                '<td width="25%">' + curPendingApptData.reason + '</td>' +
+                '<td width="15%" class="ids hide" >' + curPendingApptData.appt_id + '</td>' +
+                '<td width="15%" class=dates>' + curPendingApptData.date + '</td>' +
+                '<td width="20%" class=pname>' + curPendingApptData.patient_name + '</td>' +
+                '<td width="20%" class=dname>' + curPendingApptData.doctor_name + '</td>' +
+                '<td width="25%" class=reason>' + curPendingApptData.reason + '</td>' +
                 '<td width="10%" class="textConfirm"><input type="button" class="btn btn-primary BtnConfirm" value="Confirm" /></td>'; + 
                 '</tr>';
     $(html).appendTo($("#pendingApptTable"));
 };
 
 function updateCheckInInfo() {
+
     var curTime = new Date($.now());
     var date = curTime.getFullYear() + ":" + (curTime.getMonth()+1) + ":" + curTime.getDate();
     var hours = curTime.getHours() < 10 ? '0' + curTime.getHours() : curTime.getHours();
@@ -168,9 +179,24 @@ function updateCheckOutInfo() {
 }
 
 function confirmPendingAppt() {
+    curPendingApptData.appt_id = $(this).parent().siblings('.ids').text();
+    curPendingApptData.date = $(this).parent().siblings('.dates').text();
+    curPendingApptData.patient_name = $(this).parent().siblings('.pname').text();
+    curPendingApptData.doctor_name = $(this).parent().siblings('.dname').text();
+    curPendingApptData.reason = $(this).parent().siblings('.reason').text();
+    
     $("#confirmAppt").prop("disabled", false);
     var innerHtml = '<td width="10%" class="textConfirm"><input type="button" class="btn btn-primary BtnConfirm" value="Confirm" disabled /></td>';
-    $(".textConfirm").html(innerHtml);
+    //$(".textConfirm").html(innerHtml);
+    $(this).parent().html(innerHtml);
+
+    $("#inputDate").val(curPendingApptData.date);
+    $("#inputPatientName").val(curPendingApptData.patient_name);
+    $("#inputDoctorName").val(curPendingApptData.doctor_name);
+    $("#inputReason").val(curPendingApptData.reason);
+
+    //var innerHtml = '<td width="15%">' + time + '</td>';
+    //$(".textCheckIn").html(innerHtml);
 }
 
 function confirmAppt() {
