@@ -72,7 +72,7 @@
                                     <div class="col-xs-1"></div>
                                     <div class="col-xs-3"><label class="control-label" for="inputDate">Appt. Date</label></div>
                                     <div class="col-xs-7">
-                                        <div class="input-group date form_datetime col-md-5" data-date="2016-06-01T05:25:07Z" data-date-format="yyyy:MM:dd HH:ii" data-link-field="dtp_input1">
+                                        <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy:mm:dd HH:ii" data-link-field="dtp_input1">
                                             <input type="text" class="form-control" id="inputDate" name="Date" disabled>
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                                          </div>
@@ -83,15 +83,19 @@
                                     <div class="col-xs-1"></div>
                                     <div class="col-xs-3"><label class="control-label" for="inputPatientName">Patient's Name</label></div>
                                     <div class="col-xs-7">
-                                        <input type="text" class="form-control" id="inputPatientName" name="patientName" placeholder="Patient's Name" disabled>
+                                        <div class="input-group col-md-5">
+                                            <input type="text" class="form-control" id="inputPatientName" name="patientName" placeholder="Patient's Name" disabled>
+                                        </div>
                                     </div>
                                     <div class="col-xs-1"></div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-1"></div>
-                                    <div class="col-xs-3"><label class="control-label" for="inputDoctorName">Doctor's Name</label></div>
+                                    <div class="col-xs-3"><label class="control-label" for="selectDoctorName">Doctor's Name</label></div>
                                     <div class="col-xs-7">
-                                        <input type="email" class="form-control" id="inputDoctorName" name="doctorName" placeholder="Doctor's Name" >
+                                        <div class="input-group col-md-5">
+                                            <select class="form-control" id="selectDoctorName" name="doctorName"></select>
+                                        </div>
                                     </div>
                                     <div class="col-xs-1"></div>
                                 </div>
@@ -99,7 +103,9 @@
                                     <div class="col-xs-1"></div>
                                     <div class="col-xs-3"><label class="control-label" for="inputReason">Description</label></div>
                                     <div class="col-xs-7">
-                                        <input type="text" class="form-control" id="inputReason" name="description" placeholder="Reason for the appointment" >
+                                        <div class="input-group col-md-5">
+                                            <input type="text" class="form-control" id="inputReason" name="description" placeholder="Reason for the appointment" >
+                                        </div>
                                     </div>
                                     <div class="col-xs-1"></div>
                                 </div>

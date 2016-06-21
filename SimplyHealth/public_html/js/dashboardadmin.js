@@ -79,10 +79,11 @@ function addRowIntoTodayTable(i) {
         checkoutHtml = '<td width="15%">' + curApptData.check_out + '</td>';
     }
     var html = '<tr>' +
-                '<td width="15%">' + curApptData.date + '</td>' +
-                '<td width="20%">' + curApptData.patient_name + '</td>' +
-                '<td width="20%">' + curApptData.doctor_name + '</td>' +
-                '<td width="25%">' + curApptData.reason + '</td>' +
+                '<td class="ids hide" >' + curApptData.appt_id + '</td>' +
+                '<td width="15%" class=dates>' + curApptData.date + '</td>' +
+                '<td width="20%" class=pname>' + curApptData.patient_name + '</td>' +
+                '<td width="20%" class=dname>' + curApptData.doctor_name + '</td>' +
+                '<td width="25%" class=reason>' + curApptData.reason + '</td>' +
                 checkinHtml + 
                 checkoutHtml +
                 '</tr>';
@@ -112,11 +113,22 @@ function getPendingAppts(event) {
         showMeridian: 1
     });
     
+    $('#selectDoctorName option').remove();
+    $.getJSON("api/staffs.php/doctors",
+    function(data) {
+        var doctors = JSON.parse(JSON.stringify(data));
+        for(var i = 0; i < doctors.length; i++) {
+            var doctor = doctors[i];
+            var html = '<option value="' + doctor.doctor_id + '">' + doctor.doctor_name + '</option>';
+            $('#selectDoctorName').append(html);
+        }
+    })
+    .fail(showAjaxError);
 }
 
 function addRowIntoPendingTable() {
     var html = '<tr>' +
-                '<td width="15%" class="ids hide" >' + curPendingApptData.appt_id + '</td>' +
+                '<td class="ids hide" >' + curPendingApptData.appt_id + '</td>' +
                 '<td width="15%" class=dates>' + curPendingApptData.date + '</td>' +
                 '<td width="20%" class=pname>' + curPendingApptData.patient_name + '</td>' +
                 '<td width="20%" class=dname>' + curPendingApptData.doctor_name + '</td>' +
@@ -128,6 +140,12 @@ function addRowIntoPendingTable() {
 
 function updateCheckInInfo() {
 
+    curApptData.appt_id = $(this).parent().siblings('.ids').text();
+    curApptData.date = "";
+    curApptData.reason = "";
+    curApptData.doctor_id = "";
+    curApptData.check_out = "";
+
     var curTime = new Date($.now());
     var date = curTime.getFullYear() + ":" + (curTime.getMonth()+1) + ":" + curTime.getDate();
     var hours = curTime.getHours() < 10 ? '0' + curTime.getHours() : curTime.getHours();
@@ -135,9 +153,9 @@ function updateCheckInInfo() {
     var seconds = curTime.getSeconds() < 10 ? '0' + curTime.getSeconds() : curTime.getSeconds();
     var time = hours + ":" + minutes + ":" + seconds;
     var innerHtml = '<td width="15%">' + time + '</td>';
-    $(".textCheckIn").html(innerHtml);
+    $(this).parent().html(innerHtml);
     var checkoutHtml = '<td width="10%" class="textCheckOut"><input type="button" class="btn btn-primary BtnCheckOut" value="Check-out"/></td>';
-    $(".textCheckOut").html(checkoutHtml);
+    $(this).parent().siblings('.textCheckOut').html(checkoutHtml);
     $(".BtnCheckOut").click(updateCheckOutInfo);
 
     curApptData.check_in = date + " " + time;
@@ -154,9 +172,16 @@ function updateCheckInInfo() {
     .fail(function( jqXHR, textStatus ) {
         showAlert((typeof jqxhr.responseJSON) === "undefined" ? jqxhr.responseText : jqxhr.responseJSON.error, true);
     });
+    getTodayAppts();
 }
 
 function updateCheckOutInfo() {
+    curApptData.appt_id = $(this).parent().siblings('.ids').text();
+    curApptData.date = "";
+    curApptData.reason = "";
+    curApptData.doctor_id = "";
+    curApptData.check_in = "";
+
     var curTime = new Date($.now());
     var date = curTime.getFullYear() + ":" + (curTime.getMonth()+1) + ":" + curTime.getDate();
     var hours = curTime.getHours() < 10 ? '0' + curTime.getHours() : curTime.getHours();
@@ -164,7 +189,7 @@ function updateCheckOutInfo() {
     var seconds = curTime.getSeconds() < 10 ? '0' + curTime.getSeconds() : curTime.getSeconds();
     var time = hours + ":" + minutes + ":" + seconds;
     var innerHtml = '<td width="15%">' + time + '</td>';
-    $(".textCheckOut").html(innerHtml);
+    $(this).parent().html(innerHtml);
 
     curApptData.check_out = date + " " + time;
     $.ajax({
@@ -180,7 +205,7 @@ function updateCheckOutInfo() {
     .fail(function( jqXHR, textStatus ) {
         showAlert((typeof jqxhr.responseJSON) === "undefined" ? jqxhr.responseText : jqxhr.responseJSON.error, true);
     });
-    
+    getTodayAppts();    
 }
 
 function confirmPendingAppt() {
@@ -197,7 +222,6 @@ function confirmPendingAppt() {
 
     $("#inputDate").val(curPendingApptData.date);
     $("#inputPatientName").val(curPendingApptData.patient_name);
-    $("#inputDoctorName").val(curPendingApptData.doctor_name);
     $("#inputReason").val(curPendingApptData.reason);
 
     //var innerHtml = '<td width="15%">' + time + '</td>';
@@ -205,30 +229,27 @@ function confirmPendingAppt() {
 }
 
 function confirmAppt() {
-    /*
-    var curTime = new Date($.now());
-    var date = curTime.getFullYear() + ":" + (curTime.getMonth()+1) + ":" + curTime.getDate();
-    var hours = curTime.getHours() < 10 ? '0' + curTime.getHours() : curTime.getHours();
-    var minutes = curTime.getMinutes() < 10 ? '0' + curTime.getMinutes() : curTime.getMinutes();
-    var seconds = curTime.getSeconds() < 10 ? '0' + curTime.getSeconds() : curTime.getSeconds();
-    var time = hours + ":" + minutes + ":" + seconds;
-    var innerHtml = '<td width="15%">' + time + '</td>';
-    $(".textCheckOut").html(innerHtml);
+    curPendingApptData.date = $("#inputDate").val();
+    curPendingApptData.doctor_id = $("#selectDoctorName").val();
+    curPendingApptData.reason = $("#inputReason").val();
 
-    curApptData.check_out = date + " " + time;
     $.ajax({
         method: "PUT",
-        url: "api/appts.php/" + curApptData.appt_id,
+        url: "api/appts.php/" + curPendingApptData.appt_id,
         async: false,
-        data: JSON.stringify(curApptData)
+        data: JSON.stringify(curPendingApptData)
     })
     .done(function( data ) {
         //showAlert("Appointment Check-In has been updated",false);
-        alert("Check-Out time has been updated for the appointment!")
+        alert("Appointment has been confirmed!")
     })
     .fail(function( jqXHR, textStatus ) {
         showAlert((typeof jqxhr.responseJSON) === "undefined" ? jqxhr.responseText : jqxhr.responseJSON.error, true);
     });
-    */
     
+    $("#inputDate").val('');
+    $("#inputPatientName").val('');
+    $("#inputReason").val('');
+    
+    getPendingAppts();
 }
