@@ -119,6 +119,23 @@ CREATE TABLE IF NOT EXISTS patient_history (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Table structure for table 'appts'
+--
+
+CREATE TABLE `appts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `patient_id` int(11) DEFAULT NULL,
+  `doctor_id` int(11) DEFAULT NULL,
+  `reason` varchar(120) DEFAULT NULL,
+  `appt_date` datetime DEFAULT NULL,
+  `status` varchar(11) DEFAULT NULL,
+  `check_in` datetime DEFAULT NULL,
+  `check_out` datetime DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+--
 -- Constraints for table `patient`
 --
 ALTER TABLE `patient`
@@ -142,6 +159,13 @@ ALTER TABLE `users`
 --
 ALTER TABLE `staffs`
   ADD CONSTRAINT `staffs_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table appts
+--
+ALTER TABLE appts
+  ADD CONSTRAINT appts_ibfk_1 FOREIGN KEY (patient_id) REFERENCES patient (id),
+  ADD CONSTRAINT appts_ibfk_2 FOREIGN KEY (doctor_id) REFERENCES staffs (id);
 
 --
 -- Constraints for dumped tables

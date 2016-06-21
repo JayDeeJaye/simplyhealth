@@ -1,6 +1,18 @@
 <?php
 class sessionClass
 {
+    // Hold an instance of the class
+    private static $instance;
+ 
+    // The singleton method
+    public static function singleton()
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new sessionClass();
+        }
+        return self::$instance;
+    }
+    
     public function __construct(){
         // Set handler to overide SESSION
         session_set_save_handler(

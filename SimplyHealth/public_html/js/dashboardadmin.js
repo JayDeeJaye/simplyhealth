@@ -3,38 +3,201 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-function loadAdminDashboard() {
-    var userName = getFullName();
-    alert(userName);
-    document.getElementById('hellotag').innerHTML = 'Hello ' + userName + '!';
+var adminForm;
+var todayApptData = new Object();
+var curApptData = new Object();
+var pendingApptData = new Object();
+var curPendingApptData = new Object();
+
+$(document).ready(function() {
+    // generic ajax error handler
+//    $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
+//       alert( settings.url + ": "+thrownError + " : " + ((typeof jqxhr.responseJSON) === "undefined" ? jqxhr.responseText : jqxhr.responseJSON.error));
+//    });
+
+    $("#refreshTodayAppts").click(getTodayAppts);
+    $("#refreshPendingAppts").click(getPendingAppts);
+    $("#confirmAppt").click(confirmAppt);
+ 
+    var staffData = new Object();
+    $.getJSON("api/login.php/whoami",
+    function(data) {
+        staffData.id = data.staff.id;
+        staffData.firstName = data.staff.firstName;
+        $("#pGreeting").text("Hello " + staffData.firstName + "!");
+        getTodayAppts();
+        getPendingAppts();
+    })
+    .fail(showAjaxError);
+});
+
+function showAjaxError (jqxhr, textStatus, thrownError) {
+    showAlert((typeof jqxhr.responseJSON) === "undefined" ? jqxhr.responseText : jqxhr.responseJSON.error, true);
 }
 
-function getFullName() {
-    var userName = "";
-    var getUserURL = "php/UserFunctions.php?action=getFullName";
-    var result = true;
-    $.ajax({
-        url:getUserURL,
-        async: false,
-        success: function (response) {
-            var json = JSON.parse(response);
-            if(json.success == 1) {
-                result = true;
-                userName = json.message;
-            }
-            else {
-                result = false;
-            }
-        },
-        error: function () {
-            alert("Error: Unable to get loggedin user!");
-            result = false;
-        }
-    });
-    if(userName == "") {
-        alert("Error: User does not logged-in!");
+function showAlert (message,isError) {
+    if ( ! $( "#divAlert" ).length ) {
+        $("<div></div>", {
+            "class": "alert",
+            "role": "alert",
+            id: "divAlert",
+            html: '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span id="spanAlert"></span>' 
+        }).appendTo( "#divPopup");
     }
-    return userName;
+    $("#divAlert").toggleClass("alert-info",!isError);
+    $("#divAlert").toggleClass("alert-danger",isError);
+    $("#spanAlert").html(message);
+}
+
+function getTodayAppts(event) {
+    $('#todayApptTable tr').slice(1).remove();
+    $.getJSON("api/appts.php/today",
+    function(data) {
+        todayApptData = JSON.parse(JSON.stringify(data));
+        for(var i = 0; i < todayApptData.length; i++) {
+            curApptData = todayApptData[i];
+            addRowIntoTodayTable();
+            $(".BtnCheckIn").click(updateCheckInInfo);
+            $(".BtnCheckOut").click(updateCheckOutInfo);
+        }
+    })
+    .fail(showAjaxError);
+}
+
+function addRowIntoTodayTable() {
+    var checkinHtml = '<td width="10%" class="textCheckIn"><input type="button" class="btn btn-primary BtnCheckIn" value="Check-in" /></td>';
+    var checkoutHtml = '<td width="10%" class="textCheckOut"><input type="button" class="btn btn-primary BtnCheckOut" value="Check-out" disabled /></td>';
+    if(curApptData.check_in != null) {
+        checkinHtml = '<td width="15%">' + curApptData.check_in + '</td>';
+        checkoutHtml = '<td width="10%" class="textCheckOut"><input type="button" class="btn btn-primary BtnCheckOut" value="Check-out"/></td>';
+    }
+    if(curApptData.check_out != null) {
+        checkoutHtml = '<td width="15%">' + curApptData.check_out + '</td>';
+    }
+    var html = '<tr>' +
+                '<td width="15%">' + curApptData.date + '</td>' +
+                '<td width="20%">' + curApptData.patient_name + '</td>' +
+                '<td width="20%">' + curApptData.doctor_name + '</td>' +
+                '<td width="25%">' + curApptData.reason + '</td>' +
+                checkinHtml + 
+                checkoutHtml +
+                '</tr>';
+    $(html).appendTo($("#todayApptTable"));
 };
 
+function getPendingAppts(event) {
+    $("#confirmAppt").prop("disabled", true);
+    $('#pendingApptTable tr').slice(1).remove();
+    $.getJSON("api/appts.php/pending",
+    function(data) {
+        pendingApptData = JSON.parse(JSON.stringify(data));
+        for(var i = 0; i < pendingApptData.length; i++) {
+            curPendingApptData = pendingApptData[i];
+            addRowIntoPendingTable();
+            $(".BtnConfirm").click(confirmPendingAppt);
+        }
+    })
+    .fail(showAjaxError);
+}
 
+function addRowIntoPendingTable() {
+    var html = '<tr>' +
+                '<td width="15%">' + curPendingApptData.date + '</td>' +
+                '<td width="20%">' + curPendingApptData.patient_name + '</td>' +
+                '<td width="20%">' + curPendingApptData.doctor_name + '</td>' +
+                '<td width="25%">' + curPendingApptData.reason + '</td>' +
+                '<td width="10%" class="textConfirm"><input type="button" class="btn btn-primary BtnConfirm" value="Confirm" /></td>'; + 
+                '</tr>';
+    $(html).appendTo($("#pendingApptTable"));
+};
+
+function updateCheckInInfo() {
+    var curTime = new Date($.now());
+    var date = curTime.getFullYear() + ":" + (curTime.getMonth()+1) + ":" + curTime.getDate();
+    var hours = curTime.getHours() < 10 ? '0' + curTime.getHours() : curTime.getHours();
+    var minutes = curTime.getMinutes() < 10 ? '0' + curTime.getMinutes() : curTime.getMinutes();
+    var seconds = curTime.getSeconds() < 10 ? '0' + curTime.getSeconds() : curTime.getSeconds();
+    var time = hours + ":" + minutes + ":" + seconds;
+    var innerHtml = '<td width="15%">' + time + '</td>';
+    $(".textCheckIn").html(innerHtml);
+    var checkoutHtml = '<td width="10%" class="textCheckOut"><input type="button" class="btn btn-primary BtnCheckOut" value="Check-out"/></td>';
+    $(".textCheckOut").html(checkoutHtml);
+    $(".BtnCheckOut").click(updateCheckOutInfo);
+
+    curApptData.check_in = date + " " + time;
+    $.ajax({
+        method: "PUT",
+        url: "api/appts.php/" + curApptData.appt_id,
+        async: false,
+        data: JSON.stringify(curApptData)
+    })
+    .done(function( data ) {
+        //showAlert("Appointment Check-In has been updated",false);
+        alert("Check-In time has been updated for the appointment!")
+    })
+    .fail(function( jqXHR, textStatus ) {
+        showAlert((typeof jqxhr.responseJSON) === "undefined" ? jqxhr.responseText : jqxhr.responseJSON.error, true);
+    });
+}
+
+function updateCheckOutInfo() {
+    var curTime = new Date($.now());
+    var date = curTime.getFullYear() + ":" + (curTime.getMonth()+1) + ":" + curTime.getDate();
+    var hours = curTime.getHours() < 10 ? '0' + curTime.getHours() : curTime.getHours();
+    var minutes = curTime.getMinutes() < 10 ? '0' + curTime.getMinutes() : curTime.getMinutes();
+    var seconds = curTime.getSeconds() < 10 ? '0' + curTime.getSeconds() : curTime.getSeconds();
+    var time = hours + ":" + minutes + ":" + seconds;
+    var innerHtml = '<td width="15%">' + time + '</td>';
+    $(".textCheckOut").html(innerHtml);
+
+    curApptData.check_out = date + " " + time;
+    $.ajax({
+        method: "PUT",
+        url: "api/appts.php/" + curApptData.appt_id,
+        async: false,
+        data: JSON.stringify(curApptData)
+    })
+    .done(function( data ) {
+        //showAlert("Appointment Check-In has been updated",false);
+        alert("Check-Out time has been updated for the appointment!")
+    })
+    .fail(function( jqXHR, textStatus ) {
+        showAlert((typeof jqxhr.responseJSON) === "undefined" ? jqxhr.responseText : jqxhr.responseJSON.error, true);
+    });
+    
+}
+
+function confirmPendingAppt() {
+    $("#confirmAppt").prop("disabled", false);
+    var innerHtml = '<td width="10%" class="textConfirm"><input type="button" class="btn btn-primary BtnConfirm" value="Confirm" disabled /></td>';
+    $(".textConfirm").html(innerHtml);
+}
+
+function confirmAppt() {
+    /*
+    var curTime = new Date($.now());
+    var date = curTime.getFullYear() + ":" + (curTime.getMonth()+1) + ":" + curTime.getDate();
+    var hours = curTime.getHours() < 10 ? '0' + curTime.getHours() : curTime.getHours();
+    var minutes = curTime.getMinutes() < 10 ? '0' + curTime.getMinutes() : curTime.getMinutes();
+    var seconds = curTime.getSeconds() < 10 ? '0' + curTime.getSeconds() : curTime.getSeconds();
+    var time = hours + ":" + minutes + ":" + seconds;
+    var innerHtml = '<td width="15%">' + time + '</td>';
+    $(".textCheckOut").html(innerHtml);
+
+    curApptData.check_out = date + " " + time;
+    $.ajax({
+        method: "PUT",
+        url: "api/appts.php/" + curApptData.appt_id,
+        async: false,
+        data: JSON.stringify(curApptData)
+    })
+    .done(function( data ) {
+        //showAlert("Appointment Check-In has been updated",false);
+        alert("Check-Out time has been updated for the appointment!")
+    })
+    .fail(function( jqXHR, textStatus ) {
+        showAlert((typeof jqxhr.responseJSON) === "undefined" ? jqxhr.responseText : jqxhr.responseJSON.error, true);
+    });
+    */
+    
+}

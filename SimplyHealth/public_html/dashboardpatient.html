@@ -33,28 +33,19 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                <h2>Upcoming Appointments</h2>
+                <h2>My Appointments</h2>
                 <p>Paragraph</p>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table" id="myApptTable">
                         <thead>
                             <tr>
                                 <th>Date and Time</th>
+                                <th>Doctor's Name</th>
                                 <th>Description </th>
                                 <th>Status </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Thursday, June 24 at 10:00am</td>
-                                <td>Followup </td>
-                                <td>Confirmed </td>
-                            </tr>
-                            <tr>
-                                <td>Wednesday, August 31 at 2:00pm</td>
-                                <td>Semi-annual Physical</td>
-                                <td>Pending </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -66,10 +57,48 @@
             </div>
             <div class="col-md-12"></div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class='alert-info'>
+                    <h1><a class="btn btn-link" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-ec" role="button" href="#collapse-ec">Request Appointment</a></h1>
+                </div>
+                <div class="collapse" id="collapse-ec">
+                    <form class="form-horizontal" id="frmRequestAppointment">
+                        <div class="row">
+                            <div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3">
+                                        <label class="control-label" for="ra_date">Date</label>
+                                    </div>
+                                    <div class="col-xs-7 input-append date"  id="datetimepicker1">
+                                        <input size="16" type="text" value="" readonly  name="ra_date">
+                                        <span class="add-on"><i class="icon-th"></i></span>
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3">
+                                        <label class="control-label" for="ra_reason">Reason</label>
+                                    </div>
+                                    <div class="col-xs-7"><input type="text" class="form-control" id="ra_reason" placeholder="Reason for the appointment"></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-1">
+                                    <input class="btn btn-primary" type="button" id="requestAppointment" value="Request Appointment">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/patientProfile.js"></script>
+    <script src="js/patientProfile.js"></script>
 </body>
 
 </html>
