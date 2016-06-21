@@ -6,6 +6,8 @@
 
 var patientData = new Object();
 var patientHistoryData = new Object();
+var myApptData = new Object();
+var curApptData = new Object();
 var patientForm;
 var noHistory;
 
@@ -20,15 +22,16 @@ $(document).ready(function() {
     $("#updEmergencyContact").click(putPatientData);
     $("#updHistory").click(putPatientHistory);
 
-    $.getJSON("api/users.php/me",
+    $.getJSON("api/login.php/whoami",
       function(data) {
-          patientData.id = data.patient.id;
-          patientData.firstName = data.patient.firstName;
-          $("#pGreeting").text("Hello "+patientData.firstName);
-          getMyPatientData();
-          getMyHistoryData();
-      })
-      .fail(showAjaxError);
+        patientData.id = data.patient.id;
+        patientData.firstName = data.patient.firstName;
+        $("#pGreeting").text("Hello " + patientData.firstName + "!");
+        getMyAppts();
+        getMyPatientData();
+        getMyHistoryData();
+    })
+    .fail(showAjaxError);
 });
 
 function showAjaxError (jqxhr, textStatus, thrownError) {
@@ -48,6 +51,29 @@ function showAlert (message,isError) {
     $("#divAlert").toggleClass("alert-danger",isError);
     $("#spanAlert").html(message);
 }
+
+function getMyAppts(event) {
+    $('#myApptTable tr').slice(1).remove();
+    $.getJSON("api/appts.php/patient_id/" + patientData.id,
+    function(data) {
+        myApptData = JSON.parse(JSON.stringify(data));
+        for(var i = 0; i < myApptData.length; i++) {
+            curApptData = myApptData[i];
+            addRowIntoTable();
+        }
+    })
+    .fail(showAjaxError);
+}
+
+function addRowIntoTable() {
+    var html = '<tr>' +
+                '<td width="25%">' + curApptData.date + '</td>' +
+                '<td width="20%">' + curApptData.doctor_name + '</td>' +
+                '<td width="25%">' + curApptData.reason + '</td>' +
+                '<td width="10%">' + curApptData.status + '</td>' +
+                '</tr>';
+    $(html).appendTo($("#myApptTable"));
+};
 
 function getMyPatientData (event) {
     $.getJSON(
@@ -141,7 +167,7 @@ function putPatientHistory (event) {
     
     $.ajax(ajaxSettings)
         .done(function(data,status,jqxhr) {
-        showAlert("Your profile has been updated",false);
+        showAlert("Your medical history has been updated",false);
     })
             .fail(function(jqxhr, status, error) {
         showAlert("Error updating your profile: "+error,true);                
