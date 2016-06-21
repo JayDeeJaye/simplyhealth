@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-$( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
-    $( "#div_error" ).html( settings.url + ": "+thrownError + " <br> " + jqxhr.responseJSON.error);
-});
+//$( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
+//    $( "#div_error" ).html( settings.url + ": "+thrownError + " <br> " + jqxhr.responseJSON.error);
+//});
 
 var patientData = new Object(); 
 var patientForm;
@@ -27,7 +27,7 @@ $("form").submit(function(e) {
         passwordField.val('');
         conifrmPasswordField.val('');
 
-        $( "#div_error" ).html( "Password does not match! <br> ");
+        showAlert( "Password does not match!",true);
 
         return false;
     } else if (pwd == "" || confirmpwd == "") {
@@ -36,7 +36,7 @@ $("form").submit(function(e) {
         passwordField.val('');
         conifrmPasswordField.val('');
 
-        $( "#div_error" ).html( "Password cannot be NULL! <br> ");        
+        showAlert( "Password cannot be NULL!",true);        
     }
 
     patientData.firstName = $("#inputFirstName").val();
@@ -47,7 +47,7 @@ $("form").submit(function(e) {
     patientData.address2 = $("#inputAddress2").val();
     patientData.city = $("#inputCity").val();
     patientData.state = $("#inputState").val();
-    patientData.zip = $("#inputZipcode").val();
+    patientData.zipCode = $("#inputZipcode").val();
     patientData.emergencyContactName = $("#inputEmergencyName").val();
     patientData.emergencyContactPhone = $("#inputEmergencyPhone").val();
 
@@ -64,10 +64,7 @@ $("form").submit(function(e) {
         userData.roleId = data.id;
       }
     })
-    .fail(function(jqxhr, textStatus, error) {
-        var err = textStatus + ", " + error;
-        $( "#div_error" ).html( err + " <br> ");
-    });
+    .fail(showAjaxError);
 
     // create the user first, we'll need the id
     userData.username = userName;
@@ -75,21 +72,41 @@ $("form").submit(function(e) {
     $.post("api/users.php",
         JSON.stringify(userData),
         userSuccess,
-        "json");
+        "json")
+    .fail(showAjaxError);
             
 });
 
 function userSuccess (data) {
-    $("#div_info").text("Returned from the users api call: "+JSON.stringify(data));
+    showAlert("Returned from the users api call: "+JSON.stringify(data),false);
     // Add the patient info for the user.
     patientData.userId = data.id;
 
     $.post("api/patients.php",
         JSON.stringify(patientData),
         patientSuccess,
-        "json");
+        "json")
+    .fail(showAjaxError);
 }
 
 function patientSuccess (data) {
     patientForm.submit();
+}
+
+function showAjaxError (jqxhr, textStatus, thrownError) {
+    showAlert((typeof jqxhr.responseJSON) === "undefined" ? jqxhr.responseText : jqxhr.responseJSON.error, true);
+}
+
+function showAlert (message,isError) {
+    if ( ! $( "#divAlert" ).length ) {
+        $("<div></div>", {
+            "class": "alert",
+            "role": "alert",
+            id: "divAlert",
+            html: '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span id="spanAlert"></span>' 
+        }).appendTo( "#divPopup");
+    }
+    $("#divAlert").toggleClass("alert-info",!isError);
+    $("#divAlert").toggleClass("alert-danger",isError);
+    $("#spanAlert").html(message);
 }
