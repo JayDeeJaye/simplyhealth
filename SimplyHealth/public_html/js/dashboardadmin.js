@@ -18,16 +18,11 @@ $(document).ready(function() {
     $("#refreshTodayAppts").click(getTodayAppts);
     $("#refreshPendingAppts").click(getPendingAppts);
     $("#confirmAppt").click(confirmAppt);
-    $('.form_datetime').datetimepicker({
-        weekStart: 1,
-        todayBtn:  1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        forceParse: 0,
-        showMeridian: 1
-    });
-    
+    $("#inputDate").val('');
+    $("#inputPatientName").val('');
+    $("#inputDoctorName").val('');
+    $("#inputReason").val('');
+
     var staffData = new Object();
     $.getJSON("api/login.php/whoami",
     function(data) {
@@ -102,14 +97,24 @@ function getPendingAppts(event) {
         pendingApptData = JSON.parse(JSON.stringify(data));
         for(var i = 0; i < pendingApptData.length; i++) {
             curPendingApptData = pendingApptData[i];
-            addRowIntoPendingTable(i);
+            addRowIntoPendingTable();
         }
     })
     .fail(showAjaxError);
     $("#pendingApptTable").on("click", ".BtnConfirm", confirmPendingAppt);
+    $('.form_datetime').datetimepicker({
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
+    
 }
 
-function addRowIntoPendingTable(i) {
+function addRowIntoPendingTable() {
     var html = '<tr>' +
                 '<td width="15%" class="ids hide" >' + curPendingApptData.appt_id + '</td>' +
                 '<td width="15%" class=dates>' + curPendingApptData.date + '</td>' +
