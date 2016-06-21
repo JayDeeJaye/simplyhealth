@@ -21,6 +21,9 @@ $(document).ready(function() {
     $("#updBiographic").click(putPatientData);
     $("#updEmergencyContact").click(putPatientData);
     $("#updHistory").click(putPatientHistory);
+    $("#requestAppt").click(requestAppt);
+    $("#inputDate").val('');
+    $("#inputReason").val('');
 
     $.getJSON("api/login.php/whoami",
       function(data) {
@@ -63,6 +66,15 @@ function getMyAppts(event) {
         }
     })
     .fail(showAjaxError);
+    $('.form_datetime').datetimepicker({
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
 }
 
 function addRowIntoTable() {
@@ -172,4 +184,30 @@ function putPatientHistory (event) {
             .fail(function(jqxhr, status, error) {
         showAlert("Error updating your profile: "+error,true);                
     });
+}
+
+function requestAppt() {
+    var newAppt = new Object();
+    newAppt.appt_date = $("#inputDate").val();
+    newAppt.patient_id = patientData.id;
+    newAppt.reason = $("#inputReason").val();
+
+    $.ajax({
+        method: "POST",
+        url: "api/appts.php/",
+        async: false,
+        data: JSON.stringify(newAppt)
+    })
+    .done(function( data ) {
+        //showAlert("Appointment Check-In has been updated",false);
+        alert("Appointment has been requested!")
+    })
+    .fail(function( jqXHR, textStatus ) {
+        showAlert((typeof jqxhr.responseJSON) === "undefined" ? jqxhr.responseText : jqxhr.responseJSON.error, true);
+    });
+    
+    $("#inputDate").val('');
+    $("#inputReason").val('');
+    
+    getMyAppts();
 }

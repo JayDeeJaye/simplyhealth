@@ -78,6 +78,28 @@
                 } else {
                     throw new Exception(mysqli_error($dbConn),"500");
                 }
+            } else if($url_pieces[1] == "doctors") {
+                $sql = "SELECT staffs.id sid, staffs.firstname sfname from staffs "
+                        . "inner join users on users.id = staffs.userid "
+                        . "inner join roles on roles.id = users.roleid "
+                        . "where roles.id = 3 ORDER BY staffs.firstname";
+                if ($result = $dbConn->query($sql)) {
+                    if ($result->num_rows > 0) {
+                        $i = 0;
+                        while ($row = $result->fetch_assoc()) {
+                            $data[$i++] = [
+                                "doctor_id"          => $row["sid"],
+                                "doctor_name"        => $row["sfname"]
+                            ];
+                        }
+                        $status = "200";
+                        $header="Content-Type: application/json";
+                        $result->close();
+                    }
+                } else {
+                    throw new Exception(mysqli_error($dbConn),"500");
+                }
+
             } else {
                 // GET one by id
                 $staffId = $url_pieces[1];
