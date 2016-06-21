@@ -132,11 +132,13 @@ class PatientDTO implements JsonSerializable {
     }
 
     public function jsonSerialize() {
-        $result = [];
-        foreach ($this as $key => $value) {
-            $result[$key]=$value;
-        }
-        return $result;
+        $result = get_object_vars($this);
+        return (object) $result;
+//        $result = [];
+//        foreach ($this as $key => $value) {
+//            $result[$key]=$value;
+//        }
+//        return $result;
     }
 
 }

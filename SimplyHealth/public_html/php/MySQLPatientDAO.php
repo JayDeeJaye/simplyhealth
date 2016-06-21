@@ -105,22 +105,15 @@ SQL;
         $this->dbConn = MySQLDAOFactory::createConnection();
         $sql = self::SQL_FIND_ALL;
         $data = [];
-        echo $sql;
-        
         try {
             $result = $this->dbConn->query($sql);
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
-        //return $result->fetch_all(MYSQLI_ASSOC);
-//        if ($result = $this->dbConn->query($sql)) {
-//            while ($row = $result->fetch_assoc()) {
-//                array_push($data, $this->mapRsData($row));
-//            }
-//            return $data;
-//        } else {
-//            throw new Exception(mysqli_error($this->dbConn));
-//        }               
+        while ($row = $result->fetch_assoc()) {
+            array_push($data, $this->mapRsData($row));
+        }
+        return $data;
     }
 
     public function findById($patientId) {
