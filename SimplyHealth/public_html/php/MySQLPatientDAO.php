@@ -77,6 +77,7 @@ SQL;
     public function __destruct() {
         if (isset($this->dbConn)){
             $this->dbConn->close();
+            unset($this);
         }
     }
     
