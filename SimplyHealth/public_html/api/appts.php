@@ -7,6 +7,27 @@ $dbConn= new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
 
 switch($verb) {
     case 'POST':
+        $appt_date  = $dbConn->real_escape_string($params['appt_date']);
+        $reason   = $dbConn->real_escape_string($params['reason']);
+        $patient_id      = $dbConn->real_escape_string($params['patient_id']);
+        $sql = "INSERT INTO appts (appt_date,"
+                        . "reason,"
+                        . "status,"
+                        . "patient_id) values ("
+                        . "'$appt_date'"
+                        . ",'$reason'"
+                        . ",'Pending'"
+                        . ",$patient_id)";
+        if ($dbConn->query($sql)) {
+            // success
+            $apptId = $dbConn->insert_id;
+            $status = "201";
+            $url="api/appts.php/$apptId";
+            $header="Location: $url; Content-Type: application/json";
+            $data['id']=$apptId;
+        } else {
+            throw new Exception(mysqli_error($dbConn));
+        }
         break;
     case 'GET':
         if ($url_pieces[1] == "today") {
