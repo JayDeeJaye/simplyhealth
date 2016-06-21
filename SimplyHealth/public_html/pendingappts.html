@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimplyHealth</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand navbar-link" href="#">SimplyHealth </a>
+                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li role="presentation"><a href="dashboardadmin.html">Today's appointments</a></li>
+                    <li class="active" role="presentation"><a href="#">Pending appointments</a></li>
+                </ul>
+                <p class="navbar-text navbar-right" id="pGreeting">Hello Admin!</p>
+            </div>
+        </div>
+    </nav>
+    <!-- 
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span><strong>Alert</strong> text.</span></div>
+        </div>
+    </div>
+    -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Pending Appointments</h2>
+                <div class="table-responsive">
+                    <table class="table" id="pendingApptTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Patient's Name</th>
+                                <th>Doctor's Name</th>
+                                <th>Description</th>
+                                <th>Confirm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <input class="btn btn-primary" type="button" id="refreshPendingAppts" value="Refresh">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class='alert-info'>
+                    <h1><a class="btn btn-link" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-bio" role="button" href="#collapse-bio">Confirm Appointments</a></h1>
+                </div>
+                <div class="collapse in" id="collapse-bio">
+                    <form class="form-horizontal" id="frmBiographic">
+                        <div class="row">
+                            <div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputDate">Appt. Date</label></div>
+                                    <div class="col-xs-7">
+                                        <div class="input-group date form_datetime col-md-5" data-date="2016-06-01T05:25:07Z" data-date-format="yyyy:MM:dd HH:ii" data-link-field="dtp_input1">
+                                            <input type="text" class="form-control" id="inputDate" name="Date" disabled>
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                         </div>
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputPatientName">Patient's Name</label></div>
+                                    <div class="col-xs-7">
+                                        <input type="text" class="form-control" id="inputPatientName" name="patientName" placeholder="Patient's Name" disabled>
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputDoctorName">Doctor's Name</label></div>
+                                    <div class="col-xs-7">
+                                        <input type="email" class="form-control" id="inputDoctorName" name="doctorName" placeholder="Doctor's Name" >
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-1"></div>
+                                    <div class="col-xs-3"><label class="control-label" for="inputReason">Description</label></div>
+                                    <div class="col-xs-7">
+                                        <input type="text" class="form-control" id="inputReason" name="description" placeholder="Reason for the appointment" >
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-1">
+                                    <input class="btn btn-primary" type="button" id="confirmAppt" value="Confirm Appointment" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap-datetimepicker.js"></script>
+    <script src="js/dashboardadmin.js"></script>
+</body>
+
+</html>
