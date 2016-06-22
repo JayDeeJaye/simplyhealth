@@ -22,51 +22,6 @@ class MongoDBPatientDAO implements patientDAO {
     private $dbConn;
     private $collection;
     
-//    // SQL statements for each operation
-//    const SQL_INSERT = <<<SQL
-//        INSERT INTO patient
-//            (
-//                userid,firstname,lastname,email,
-//                phone,address1,address2,
-//                city,state,zipcode,
-//                emergency_contact_name,
-//                emergency_contact_phone
-//             ) 
-//        VALUES (?,'?','?','?','?','?','?','?','?','?','?','?')
-//SQL;
-//    const SQL_FIND_ALL = <<<SQL
-//        SELECT id, userid, firstname, lastname, email, address1, address2,
-//               city, state, zipcode, phone, emergency_contact_name,
-//               emergency_contact_phone
-//        FROM patient
-//SQL;
-//    const SQL_FIND_BY_ID = <<<SQL
-//        SELECT  id,userid,firstname,lastname,email,
-//                phone,address1,address2,
-//                city,state,zipcode,
-//                emergency_contact_name,
-//                emergency_contact_phone
-//        FROM patient
-//        WHERE id = ?
-//SQL;
-//        
-//    const SQL_UPDATE = <<<SQL
-//        UPDATE patient
-//            SET userid                  =  ?,
-//                firstname               = '?',
-//                lastname                = '?',
-//                email                   = '?',
-//                phone                   = '?',
-//                address1                = '?',
-//                address2                = '?',
-//                city                    = '?',
-//                state                   = '?',
-//                zipcode                 = '?',
-//                emergency_contact_name  = '?',
-//                emergency_contact_phone = '?'
-//            WHERE id = ?
-//SQL;
-//    const SQL_DELETE = "DELETE FROM patient WHERE id = ?";
 
     public function __construct() {
         $this->dbConn = MongoDBDAOFactory::createConnection();
@@ -113,6 +68,14 @@ class MongoDBPatientDAO implements patientDAO {
 //            array_push($data, $this->mapRsData($row));
 //        }
 //        return $data;
+    }
+
+    public function findByUserId($userId) {
+        $data = $this->collection->findOne(['userId' => (new MongoDB\BSON\ObjectId($userId))]);
+        if ($data === null) {
+            throw new Exception("Resource not found",404);
+        }
+        return $data;
     }
 
     public function findById($patientId) {

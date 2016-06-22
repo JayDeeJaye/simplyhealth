@@ -153,7 +153,7 @@ class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
     function bsonUnserialize(array $data)
     {
         $this->id = (string) $data['_id'];
-        $this->userId = $data['userId'];
+        $this->userId = (string) $data['userId'];
         $this->firstName = $data['firstName'];
         $this->lastName = $data['lastName'];
         $this->email = $data['email'];
