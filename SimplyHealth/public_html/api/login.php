@@ -78,7 +78,7 @@
                     try {
                         $data = $usersDAO->findByUserName($user);
                         $userId = $data->getId();
-                        if($data->getRoleId() == 4) {
+                        if($data->getRoleId() == 4 || $data->getRoleId() == "576af1f6ee66a41d9c003567") {
                             $data = $patientDAO->findByUserId($userId);
                         } else {
                             $data = $staffsDAO->findByUserId($userId);                                

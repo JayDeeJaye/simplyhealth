@@ -26,6 +26,11 @@ class MongoDBRolesDAO implements rolesDAO {
         $this->dbConn = MongoDBDAOFactory::createConnection();
         $this->collection = $this->dbConn->simplyhealth->personRoles;
     }
+
+    public function create(RolesDTO $roles) {
+        $result = $this->collection->insertOne($roles);
+        $roles->setId((string) $result->getInsertedId());
+    }
     
     public function findByRoleName($roleName) {
         $data = $this->collection->findOne(['roleName' => $roleName]);
