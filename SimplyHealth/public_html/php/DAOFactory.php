@@ -24,6 +24,8 @@ abstract class DAOFactory {
         switch ($database) {
             case self::DB_MYSQL :
                 return new MySQLDAOFactory();
+            case self::DB_MONGODB :
+                return new MongoDBDAOFactory();
         }
     }
 }

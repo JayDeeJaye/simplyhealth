@@ -11,7 +11,7 @@
  *
  * @author julie
  */
-class PatientDTO implements JsonSerializable {
+class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
     
     private $id;
     private $userId;
@@ -134,11 +134,37 @@ class PatientDTO implements JsonSerializable {
     public function jsonSerialize() {
         $result = get_object_vars($this);
         return (object) $result;
-//        $result = [];
-//        foreach ($this as $key => $value) {
-//            $result[$key]=$value;
-//        }
-//        return $result;
     }
 
+    function bsonSerialize()
+    {
+        foreach (get_object_vars($this) as $key => $value) {
+            if ($key === "id") {
+                if ($value !== null) {
+                    $result['_id'] = new MongoDB\BSON\ObjectId($value);
+                }
+            } else {
+                $result[$key] = $value;
+            }
+        }
+        return (object) $result;
+    }
+
+    function bsonUnserialize(array $data)
+    {
+        $this->id = (string) $data['_id'];
+        $this->userId = $data['userId'];
+        $this->firstName = $data['firstName'];
+        $this->lastName = $data['lastName'];
+        $this->email = $data['email'];
+        $this->address1 = $data['address1'];
+        $this->address2 = $data['address2'];
+        $this->city = $data['city'];
+        $this->state = $data['state'];
+        $this->zipCode = $data['zipCode'];
+        $this->phone = $data['phone'];
+        $this->emergencyContactName = $data['emergencyContactName'];
+        $this->emergencyContactPhone = $data['emergencyContactPhone'];
+    }
+    
 }
