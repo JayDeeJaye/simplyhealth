@@ -28,6 +28,10 @@ SQL;
         }
     }
     
+    public function create(RolesDTO $roles) {
+        //not implemented
+    }
+
     public function findById($roleId) {
         $this->dbConn = MySQLDAOFactory::createConnection();
         $sql = MySQLHelper::prepareSQL(self::SQL_FIND_BY_ID, array($roleId));
