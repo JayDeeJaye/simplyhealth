@@ -9,9 +9,6 @@
     require_once('../php/UsersDTO.php');
     require_once('../php/RolesDTO.php');
 
-// Open a connection to the database
-$dbConn= new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
-
     function getData($inData) {
         $p = new UsersDTO();
 
@@ -21,7 +18,7 @@ $dbConn= new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
         return $p;
     }
 
-    $myDAOFactory = DAOFactory::getDAOFactory(DAOFactory::DB_MYSQL);
+    $myDAOFactory = DAOFactory::getDAOFactory(DB_TYPE);
     $usersDAO = $myDAOFactory->getUsersDAO();
     $rolesDAO = $myDAOFactory->getRolesDAO();
     $patientDAO = $myDAOFactory->getPatientDAO();

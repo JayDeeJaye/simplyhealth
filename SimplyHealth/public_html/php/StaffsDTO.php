@@ -1,6 +1,6 @@
 <?php
 
-class StaffsDTO implements JsonSerializable {
+class StaffsDTO implements JsonSerializable, MongoDB\BSON\Persistable {
     
     private $id;
     private $userId;
@@ -107,5 +107,39 @@ class StaffsDTO implements JsonSerializable {
         return (object) $result;
     }
 
+    function bsonSerialize()
+    {
+        // TODO: add ObjectId conversion for userid to reference users
+        // collection
+        foreach (get_object_vars($this) as $key => $value) {
+            if ($key === "id") {
+                if ($value !== null) {
+                    $result['_id'] = new MongoDB\BSON\ObjectId($value);
+                }
+            } else if ($key === "userId") {
+                if ($value !== null) {
+                    $result['userId'] = new MongoDB\BSON\ObjectId($value);
+                }
+            }else {
+                $result[$key] = $value;
+            }
+        }
+        return (object) $result;
+    }
+
+    function bsonUnserialize(array $data)
+    {
+        $this->id = (string) $data['_id'];
+        $this->userId = (string) $data['userId'];
+        $this->firstName = $data['firstName'];
+        $this->lastName = $data['lastName'];
+        $this->email = $data['email'];
+        $this->address1 = $data['address1'];
+        $this->address2 = $data['address2'];
+        $this->city = $data['city'];
+        $this->state = $data['state'];
+        $this->zipCode = $data['zipCode'];
+        $this->phone = $data['phone'];
+    }
 }
 

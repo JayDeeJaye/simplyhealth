@@ -25,7 +25,7 @@
         return $p;
     }
 
-    $myDAOFactory = DAOFactory::getDAOFactory(DAOFactory::DB_MYSQL);
+    $myDAOFactory = DAOFactory::getDAOFactory(DB_TYPE);
     $staffsDAO = $myDAOFactory->getStaffsDAO();
     
     switch($verb) {

@@ -7,7 +7,7 @@
     require_once('../php/MySQLDAOFactory.php');
     require_once('../php/RolesDTO.php');
 
-    $myDAOFactory = DAOFactory::getDAOFactory(DAOFactory::DB_MYSQL);
+    $myDAOFactory = DAOFactory::getDAOFactory(DB_TYPE);
     $rolesDAO = $myDAOFactory->getRolesDAO();
 
     switch($verb) {

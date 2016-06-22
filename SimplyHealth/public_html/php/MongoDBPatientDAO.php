@@ -71,8 +71,4 @@ class MongoDBPatientDAO implements patientDAO {
         }
     }
     
-    public function findByUserId($userId) {
-        
-    }
-
 }
