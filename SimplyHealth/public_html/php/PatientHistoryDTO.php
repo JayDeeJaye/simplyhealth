@@ -138,8 +138,6 @@ class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
 
     function bsonSerialize()
     {
-        // TODO: add ObjectId conversion for userid to reference users
-        // collection
         foreach (get_object_vars($this) as $key => $value) {
             if ($key === "id") {
                 if ($value !== null) {
@@ -155,7 +153,7 @@ class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
     function bsonUnserialize(array $data)
     {
         $this->id = (string) $data['_id'];
-        $this->userId = $data['userId'];
+        $this->userId = (string) $data['userId'];
         $this->firstName = $data['firstName'];
         $this->lastName = $data['lastName'];
         $this->email = $data['email'];
