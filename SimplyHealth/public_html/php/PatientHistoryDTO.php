@@ -138,18 +138,12 @@ class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
 
     function bsonSerialize()
     {
-        // TODO: add ObjectId conversion for userid to reference users
-        // collection
         foreach (get_object_vars($this) as $key => $value) {
             if ($key === "id") {
                 if ($value !== null) {
                     $result['_id'] = new MongoDB\BSON\ObjectId($value);
                 }
-            } else if ($key === "userId") {
-                if ($value !== null) {
-                    $result['userId'] = new MongoDB\BSON\ObjectId($value);
-                }
-            }else {
+            } else {
                 $result[$key] = $value;
             }
         }
