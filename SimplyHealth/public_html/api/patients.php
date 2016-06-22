@@ -6,8 +6,6 @@
     require_once('apiHeader.php');
     require_once('../php/MySQLDAOFactory.php');
     require_once('../php/PatientDTO.php');
-// Open a connection to the database
-$dbConn= new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
 
     function getData($inData) {
         $p = new PatientDTO();
@@ -28,7 +26,7 @@ $dbConn= new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
         return $p;
     }
 
-    $myDAOFactory = DAOFactory::getDAOFactory(DAOFactory::DB_MYSQL);
+    $myDAOFactory = DAOFactory::getDAOFactory(CONFIG_DB);
     $patientDAO = $myDAOFactory->getPatientDAO();
     
     switch($verb) {
