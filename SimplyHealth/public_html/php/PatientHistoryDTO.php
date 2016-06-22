@@ -11,124 +11,61 @@
  *
  * @author julie
  */
-class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
+class PatientHistoryDTO implements JsonSerializable, MongoDB\BSON\Persistable {
     
-    private $id;
-    private $userId;
-    private $firstName;
-    private $lastName;
-    private $email;
-    private $address1;
-    private $address2;
-    private $city;
-    private $state;
-    private $zipCode;
-    private $phone;
-    private $emergencyContactName;
-    private $emergencyContactPhone;
+    private $patientId;      
+    private $eczemaSelfInd;  
+    private $highCholSelfInd;
+    private $highBpSelfInd;  
+    private $mentalSelfInd;  
+    private $obesitySelfInd; 
 
-    public function getId() {
-        return $this->id;
+    public function getPatientId() {
+        return $this->patientId;
     }
 
-    public function getUserId() {
-        return $this->userId;
+    public function getEczemaSelfInd() {
+        return $this->eczemaSelfInd;
     }
 
-    public function getFirstName() {
-        return $this->firstName;
+    public function getHighCholSelfInd() {
+        return $this->highCholSelfInd;
     }
 
-    public function getLastName() {
-        return $this->lastName;
+    public function getHighBpSelfInd() {
+        return $this->highBpSelfInd;
     }
 
-    public function getEmail() {
-        return $this->email;
+    public function getMentalSelfInd() {
+        return $this->mentalSelfInd;
     }
 
-    public function getAddress1() {
-        return $this->address1;
+    public function getObesitySelfInd() {
+        return $this->obesitySelfInd;
     }
 
-    public function getAddress2() {
-        return $this->address2;
+    public function setPatientId($patientId) {
+        $this->patientId = $patientId;
     }
 
-    public function getCity() {
-        return $this->city;
+    public function setEczemaSelfInd($eczemaSelfInd) {
+        $this->eczemaSelfInd = $eczemaSelfInd;
     }
 
-    public function getState() {
-        return $this->state;
+    public function setHighCholSelfInd($highCholSelfInd) {
+        $this->highCholSelfInd = $highCholSelfInd;
     }
 
-    public function getZipCode() {
-        return $this->zipCode;
+    public function setHighBpSelfInd($highBpSelfInd) {
+        $this->highBpSelfInd = $highBpSelfInd;
     }
 
-    public function getPhone() {
-        return $this->phone;
+    public function setMentalSelfInd($mentalSelfInd) {
+        $this->mentalSelfInd = $mentalSelfInd;
     }
 
-    public function getEmergencyContactName() {
-        return $this->emergencyContactName;
-    }
-
-    public function getEmergencyContactPhone() {
-        return $this->emergencyContactPhone;
-    }
-
-    public function setId($id) {
-        $this->id = $id;
-    }
-
-    public function setUserId($userId) {
-        $this->userId = $userId;
-    }
-
-    public function setFirstName($firstName) {
-        $this->firstName = $firstName;
-    }
-
-    public function setLastName($lastName) {
-        $this->lastName = $lastName;
-    }
-
-    public function setEmail($email) {
-        $this->email = $email;
-    }
-
-    public function setAddress1($address1) {
-        $this->address1 = $address1;
-    }
-
-    public function setAddress2($address2) {
-        $this->address2 = $address2;
-    }
-
-    public function setCity($city) {
-        $this->city = $city;
-    }
-
-    public function setState($state) {
-        $this->state = $state;
-    }
-
-    public function setZipCode($zipCode) {
-        $this->zipCode = $zipCode;
-    }
-
-    public function setPhone($phone) {
-        $this->phone = $phone;
-    }
-
-    public function setEmergencyContactName($emergencyContactName) {
-        $this->emergencyContactName = $emergencyContactName;
-    }
-
-    public function setEmergencyContactPhone($emergencyContactPhone) {
-        $this->emergencyContactPhone = $emergencyContactPhone;
+    public function setObesitySelfInd($obesitySelfInd) {
+        $this->obesitySelfInd = $obesitySelfInd;
     }
 
     public function jsonSerialize() {
@@ -139,9 +76,9 @@ class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
     function bsonSerialize()
     {
         foreach (get_object_vars($this) as $key => $value) {
-            if ($key === "id") {
+            if ($key === "patientId") {
                 if ($value !== null) {
-                    $result['_id'] = new MongoDB\BSON\ObjectId($value);
+                    $result['patientId'] = new MongoDB\BSON\ObjectId($value);
                 }
             } else {
                 $result[$key] = $value;
@@ -152,19 +89,12 @@ class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
 
     function bsonUnserialize(array $data)
     {
-        $this->id = (string) $data['_id'];
-        $this->userId = (string) $data['userId'];
-        $this->firstName = $data['firstName'];
-        $this->lastName = $data['lastName'];
-        $this->email = $data['email'];
-        $this->address1 = $data['address1'];
-        $this->address2 = $data['address2'];
-        $this->city = $data['city'];
-        $this->state = $data['state'];
-        $this->zipCode = $data['zipCode'];
-        $this->phone = $data['phone'];
-        $this->emergencyContactName = $data['emergencyContactName'];
-        $this->emergencyContactPhone = $data['emergencyContactPhone'];
+        $this->patientId        = (string) $data['patientId'];
+        $this->eczemaSelfInd    = $data['eczemaSelfInd'];  
+        $this->highCholSelfInd  = $data['highCholSelfInd'];
+        $this->highBpSelfInd    = $data['highBpSelfInd'];  
+        $this->mentalSelfInd    = $data['mentalSelfInd'];  
+        $this->obesitySelfInd   = $data['obesitySelfInd']; 
     }
     
 }

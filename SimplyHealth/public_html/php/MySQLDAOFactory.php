@@ -8,6 +8,7 @@
 include_once('DAOFactory.php');
 include_once('DBConfig.php');
 include_once('MySQLPatientDAO.php');
+include_once('MySQLPatientHistoryDAO.php');
 /**
  * Description of MySQLDAOFactory
  *
@@ -22,5 +23,10 @@ class MySQLDAOFactory extends  DAOFactory {
 
     public function getPatientDAO() {
         return new MySQLPatientDAO();
-    }    
+    }
+    
+    public function getPatientHistoryDAO() {
+        return new MySQLPatientHistoryDAO();
+    }
+    
 }

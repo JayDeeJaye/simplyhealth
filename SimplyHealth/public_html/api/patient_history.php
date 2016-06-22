@@ -1,4 +1,30 @@
 <?php
+    ini_set("display_errors","1");
+    ERROR_REPORTING(E_ALL);
+
+    require_once('apiHeader.php');
+    require_once('../php/MySQLDAOFactory.php');
+    require_once('../php/MongoDBDAOFactory.php');
+    require_once('../php/PatientHistoryDTO.php');
+
+    function getData($inData) {
+        $p = new PatientDTO();
+
+        $p->setFirstName($inData['firstName']);
+        $p->setLastName($inData['lastName']);
+        $p->setEmail($inData['email']);
+        $p->setPhone($inData['phone']);
+        $p->setAddress1($inData['address1']);
+        $p->setAddress2($inData['address2']);
+        $p->setCity($inData['city']);
+        $p->setState($inData['state']);
+        $p->setZipCode($inData['zipCode']);
+        $p->setUserId($inData['userId']);
+        $p->setEmergencyContactName($inData['emergencyContactName']);
+        $p->setEmergencyContactPhone($inData['emergencyContactPhone']);
+        
+        return $p;
+    }
 
     function setPatientHistory($values) {
         return [
