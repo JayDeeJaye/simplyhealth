@@ -70,5 +70,5 @@ class MongoDBPatientDAO implements patientDAO {
             throw new Exception("Resource not found",404);
         }
     }
-
+    
 }

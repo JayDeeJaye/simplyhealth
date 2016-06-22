@@ -47,7 +47,7 @@ $("form").submit(function(e) {
     staffData.address2 = $("#inputAddress2").val();
     staffData.city = $("#inputCity").val();
     staffData.state = $("#inputState").val();
-    staffData.zip = $("#inputZipcode").val();
+    staffData.zipCode = $("#inputZipcode").val();
     var roleName = $('input[name=role]:checked').val();
 
     // get the roleid
@@ -65,20 +65,9 @@ $("form").submit(function(e) {
         var err = textStatus + ", " + error;
         $( "#div_error" ).html( err + " <br> ");
     });
-    /*
-    var url = "api/roles.php/" + roleName;
-    $.getJSON(url,
-    function(data) {
-        userData.roleId = data.id;
-    })
-    .fail(function(jqxhr, textStatus, error) {
-        var err = textStatus + ", " + error;
-        $( "#div_error" ).html( err + " <br> ");
-    });
-    */
 
     // create the user first, we'll need the id
-    userData.username = userName;
+    userData.userName = userName;
     userData.password = pwd;
     $.post("api/users.php",
         JSON.stringify(userData),
