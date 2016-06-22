@@ -5,7 +5,7 @@
  */
 function userLogin() {
     var userData = new Object();
-    userData.username = $("#inputUserName").val();
+    userData.userName = $("#inputUserName").val();
     userData.password = $("#inputPassword").val();
 
     $.ajax({
@@ -15,7 +15,7 @@ function userLogin() {
         data: JSON.stringify(userData)
     })
     .done(function( data ) {
-        var rolename = (JSON.parse(data)).rolename;
+        var rolename = data.roleName;
         switch (rolename) {
             case "Admin":
                 document.getElementById("formLogin").action = "dashboardadmin.html";

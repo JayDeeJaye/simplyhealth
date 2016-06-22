@@ -26,8 +26,8 @@ $(document).ready(function() {
     var staffData = new Object();
     $.getJSON("api/login.php/whoami",
     function(data) {
-        staffData.id = data.staff.id;
-        staffData.firstName = data.staff.firstName;
+        staffData.id = data.id;
+        staffData.firstName = data.firstName;
         $("#pGreeting").text("Hello " + staffData.firstName + "!");
         getTodayAppts();
         getPendingAppts();
@@ -103,15 +103,18 @@ function getPendingAppts(event) {
     })
     .fail(showAjaxError);
     $("#pendingApptTable").on("click", ".BtnConfirm", confirmPendingAppt);
-    $('.form_datetime').datetimepicker({
-        weekStart: 1,
-        todayBtn:  1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        forceParse: 0,
-        showMeridian: 1
-    });
+    var $nmdt1 = $('.form_datetime');
+    if ($nmdt1.length > 0) {
+        $('.form_datetime').datetimepicker({
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+    }
     
     $('#selectDoctorName option').remove();
     $.getJSON("api/staffs.php/doctors",
@@ -119,7 +122,7 @@ function getPendingAppts(event) {
         var doctors = JSON.parse(JSON.stringify(data));
         for(var i = 0; i < doctors.length; i++) {
             var doctor = doctors[i];
-            var html = '<option value="' + doctor.doctor_id + '">' + doctor.doctor_name + '</option>';
+            var html = '<option value="' + doctor.id + '">' + doctor.firstName + '</option>';
             $('#selectDoctorName').append(html);
         }
     })

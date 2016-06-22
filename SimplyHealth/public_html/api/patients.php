@@ -6,6 +6,7 @@
     require_once('apiHeader.php');
     require_once('../php/MySQLDAOFactory.php');
     require_once('../php/PatientDTO.php');
+    require_once('../php/DAOFactory.php');
 
     function getData($inData) {
         $p = new PatientDTO();
@@ -26,7 +27,7 @@
         return $p;
     }
 
-    $myDAOFactory = DAOFactory::getDAOFactory(CONFIG_DB);
+    $myDAOFactory = DAOFactory::getDAOFactory(DB_TYPE);
     $patientDAO = $myDAOFactory->getPatientDAO();
     
     switch($verb) {

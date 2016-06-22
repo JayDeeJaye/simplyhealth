@@ -1,17 +1,6 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of PatientDTO
- *
- * @author julie
- */
-class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
+class StaffsDTO implements JsonSerializable, MongoDB\BSON\Persistable {
     
     private $id;
     private $userId;
@@ -24,8 +13,6 @@ class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
     private $state;
     private $zipCode;
     private $phone;
-    private $emergencyContactName;
-    private $emergencyContactPhone;
 
     public function getId() {
         return $this->id;
@@ -69,14 +56,6 @@ class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
 
     public function getPhone() {
         return $this->phone;
-    }
-
-    public function getEmergencyContactName() {
-        return $this->emergencyContactName;
-    }
-
-    public function getEmergencyContactPhone() {
-        return $this->emergencyContactPhone;
     }
 
     public function setId($id) {
@@ -123,14 +102,6 @@ class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
         $this->phone = $phone;
     }
 
-    public function setEmergencyContactName($emergencyContactName) {
-        $this->emergencyContactName = $emergencyContactName;
-    }
-
-    public function setEmergencyContactPhone($emergencyContactPhone) {
-        $this->emergencyContactPhone = $emergencyContactPhone;
-    }
-
     public function jsonSerialize() {
         $result = get_object_vars($this);
         return (object) $result;
@@ -169,8 +140,6 @@ class PatientDTO implements JsonSerializable, MongoDB\BSON\Persistable {
         $this->state = $data['state'];
         $this->zipCode = $data['zipCode'];
         $this->phone = $data['phone'];
-        $this->emergencyContactName = $data['emergencyContactName'];
-        $this->emergencyContactPhone = $data['emergencyContactPhone'];
     }
-    
 }
+

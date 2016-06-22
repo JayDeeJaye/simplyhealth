@@ -1,89 +1,56 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of MySQLPatientDAO
- *
- * @author julie
- */
-include_once('patientDAO.php');
+include_once('staffsDAO.php');
 include_once('MySQLDAOFactory.php');
-include_once('PatientDTO.php');
+include_once('StaffsDTO.php');
 include_once('MySQLHelper.php');
 
-class MySQLPatientDAO implements patientDAO {
+class MySQLStaffsDAO implements staffsDAO {
     
     private $dbConn;
     
     // SQL statements for each operation
     const SQL_INSERT = <<<SQL
-        INSERT INTO patient
+        INSERT INTO staffs
             (
                 userid,firstname,lastname,email,
                 phone,address1,address2,
-                city,state,zipcode,
-                emergency_contact_name,
-                emergency_contact_phone
+                city,state,zipcode
              ) 
-        VALUES (?,'?','?','?','?','?','?','?','?','?','?','?')
+        VALUES (?,'?','?','?','?','?','?','?','?','?')
 SQL;
-//    const SQL_FIND_ALL = <<<SQL
-//        SELECT  id,userid,firstname,lastname,email,
-//                phone,address1,address2,
-//                city,state,zipcode,
-//                emergency_contact_name,
-//                emergency_contact_phone
-//        FROM patient
-//SQL;
+    
     const SQL_FIND_ALL = <<<SQL
         SELECT id, userid, firstname, lastname, email, address1, address2,
-               city, state, zipcode, phone, emergency_contact_name,
-               emergency_contact_phone
-        FROM patient
+               city, state, zipcode, phone
+        FROM staffs
 SQL;
+
+    const SQL_FIND_ALL_DOCTORS = <<<SQL
+        SELECT staffs.id, userid, firstname, lastname, email, address1, address2,
+               city, state, zipcode, phone FROM staffs
+        INNER JOIN users on users.id = staffs.userid
+        INNER JOIN ROLES on roles.id = users.roleid
+        WHERE roles.id = 3
+        ORDER BY staffs.firstname
+SQL;
+
     const SQL_FIND_BY_ID = <<<SQL
         SELECT  id,userid,firstname,lastname,email,
                 phone,address1,address2,
-                city,state,zipcode,
-                emergency_contact_name,
-                emergency_contact_phone
-        FROM patient
+                city,state,zipcode
+        FROM staffs
         WHERE id = ?
 SQL;
-        
+
     const SQL_FIND_BY_USER_ID = <<<SQL
         SELECT  id,userid,firstname,lastname,email,
                 phone,address1,address2,
-                city,state,zipcode,
-                emergency_contact_name,
-                emergency_contact_phone
-        FROM patient
+                city,state,zipcode
+        FROM staffs
         WHERE userid = ?
 SQL;
-
-    const SQL_UPDATE = <<<SQL
-        UPDATE patient
-            SET userid                  =  ?,
-                firstname               = '?',
-                lastname                = '?',
-                email                   = '?',
-                phone                   = '?',
-                address1                = '?',
-                address2                = '?',
-                city                    = '?',
-                state                   = '?',
-                zipcode                 = '?',
-                emergency_contact_name  = '?',
-                emergency_contact_phone = '?'
-            WHERE id = ?
-SQL;
-    const SQL_DELETE = "DELETE FROM patient WHERE id = ?";
-
+    
     public function __destruct() {
         if (isset($this->dbConn)){
             $this->dbConn->close();
@@ -91,27 +58,17 @@ SQL;
         }
     }
     
-    public function create(PatientDTO $patient) {
-        $values = $this->setValues($patient);
+    public function create(StaffsDTO $staff) {
+        $values = $this->setValues($staff);
         $this->dbConn = MySQLDAOFactory::createConnection();
         $sql = MySQLHelper::prepareSQL(self::SQL_INSERT, $values);
         if ($this->dbConn->query($sql)) {
-            $patient->setId($this->dbConn->insert_id);
+            $staff->setId($this->dbConn->insert_id);
         } else {
             throw new Exception(mysqli_error($this->dbConn));
         }               
     }
         
-    public function delete($patientId) {
-        $this->dbConn = MySQLDAOFactory::createConnection();
-        $sql = MySQLHelper::prepareSQL(self::SQL_DELETE, array($patientId));
-        if ($this->dbConn->query($sql)) {
-            // success
-        } else {
-            throw new Exception(mysqli_error($this->dbConn));
-        }               
-    }
-
     public function findAll() {
         $this->dbConn = MySQLDAOFactory::createConnection();
         $sql = self::SQL_FIND_ALL;
@@ -127,9 +84,24 @@ SQL;
         return $data;
     }
 
-    public function findById($patientId) {
+    public function findAllDoctors() {
         $this->dbConn = MySQLDAOFactory::createConnection();
-        $sql = MySQLHelper::prepareSQL(self::SQL_FIND_BY_ID, array($patientId));
+        $sql = self::SQL_FIND_ALL_DOCTORS;
+        $data = [];
+        try {
+            $result = $this->dbConn->query($sql);
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+        while ($row = $result->fetch_assoc()) {
+            array_push($data, $this->mapRsData($row));
+        }
+        return $data;
+    }
+
+    public function findById($staffId) {
+        $this->dbConn = MySQLDAOFactory::createConnection();
+        $sql = MySQLHelper::prepareSQL(self::SQL_FIND_BY_ID, array($staffId));
         if ($result = $this->dbConn->query($sql)) {
             if ($row = $result->fetch_assoc()) {
                 $data = $this->mapRsData($row);
@@ -153,19 +125,8 @@ SQL;
         }               
     }
 
-    public function update(PatientDTO $patient) {
-        $values = $this->setValues($patient);
-        $this->dbConn = MySQLDAOFactory::createConnection();
-        $sql = MySQLHelper::prepareSQL(self::SQL_UPDATE, $values);
-        if ($this->dbConn->query($sql)) {
-            // success
-        } else {
-            throw new Exception(mysqli_error($this->dbConn));
-        }               
-    }
-
     private function mapRsData ($row) {
-        $p = new PatientDTO();
+        $p = new StaffsDTO();
         $p->setId($row["id"]);
         $p->setUserId($row["userid"]);
         $p->setFirstName($row["firstname"]);
@@ -177,8 +138,6 @@ SQL;
         $p->setCity($row["city"]);
         $p->setState($row["state"]);
         $p->setZipCode($row["zipcode"]);
-        $p->setEmergencyContactName($row["emergency_contact_name"]);
-        $p->setEmergencyContactPhone($row["emergency_contact_phone"]);
         return $p;
     }
     
@@ -186,7 +145,7 @@ SQL;
     // Must match the order of placeholders in the INSERT and UPDATE
     // queries. Extra values are OK.
     // returns @array
-    private function setValues (PatientDTO $p) {
+    private function setValues (StaffsDTO $p) {
         $values = [
           $p->getUserId(),
           $p->getFirstName(),
@@ -198,10 +157,9 @@ SQL;
           $p->getCity(),
           $p->getState(),
           $p->getZipCode(),
-          $p->getEmergencyContactName(),
-          $p->getEmergencyContactPhone(),
           $p->getId()
         ];
         return $values;
     }
 }
+

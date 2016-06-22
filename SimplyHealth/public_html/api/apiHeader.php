@@ -32,3 +32,4 @@ switch($verb) {
 
 // Database configuration
 require_once('../php/DBConfig.php');
+require_once('../php/Config.php');
