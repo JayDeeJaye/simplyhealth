@@ -24,6 +24,8 @@ $dbConn= new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
     $myDAOFactory = DAOFactory::getDAOFactory(DAOFactory::DB_MYSQL);
     $usersDAO = $myDAOFactory->getUsersDAO();
     $rolesDAO = $myDAOFactory->getRolesDAO();
+    $patientDAO = $myDAOFactory->getPatientDAO();
+    $staffsDAO = $myDAOFactory->getStaffsDAO();
     
     switch($verb) {
         case 'POST':
@@ -76,26 +78,25 @@ $dbConn= new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
             if ($url_pieces[1] == "whoami") {
                 $user = sessionClass::singleton()->getUserLoggedIn();
                 if($user != "") {
-                    $sql = "SELECT roles.rolename FROM roles INNER JOIN users "
-                            . "ON roles.id = users.roleid WHERE users.username='$user'";
-                    if ($result = $dbConn->query($sql)) {
-                        $row = $result->fetch_array(MYSQLI_ASSOC);
-                        $rolename = $row['rolename'];
-                        try {
-                            if($rolename == "Patient") {
-                                $data = $usersDAO->findPatientByUserName($user);
-                            } else {
-                                $data = $usersDAO->findStaffByUserName($user);                                
-                            }
-                        } catch (Exception $e) {
-                            if ($e->getCode() == 404) {
-                                throw $e;
-                            } else {
-                                throw new Exception($e->getMessage(),500);
-                            }
+                    try {
+                        $data = $usersDAO->findByUserName($user);
+                        $userId = $data->getId();
+                        if($data->getRoleId() == 4) {
+                            $data = $patientDAO->findByUserId($userId);
+                        } else {
+                            $data = $staffsDAO->findByUserId($userId);                                
                         }
-                    } else {
-                        throw new Exception("No roles found in database.","400");            
+                        if ($data === null) {
+                            throw new Exception("Not Found",404);
+                        } else {
+                            header("Content-Type: application/json",null,"200");
+                        }
+                    } catch (Exception $e) {
+                        if ($e->getCode() == 404) {
+                            throw $e;
+                        } else {
+                            throw new Exception($e->getMessage(),500);
+                        }
                     }
                 } else {
                     throw new Exception("No user logged in.","400");            

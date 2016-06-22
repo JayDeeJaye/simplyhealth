@@ -6,8 +6,6 @@ interface usersDAO {
         
     public function findByUserName($userName);
 
-    public function findPatientByUserName($userName);
-    
-    public function findStaffByUserName($userName);
+    public function findById($userId);
     
 }

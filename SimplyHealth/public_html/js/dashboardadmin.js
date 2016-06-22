@@ -26,8 +26,8 @@ $(document).ready(function() {
     var staffData = new Object();
     $.getJSON("api/login.php/whoami",
     function(data) {
-        staffData.id = data.staff.id;
-        staffData.firstName = data.staff.firstName;
+        staffData.id = data.id;
+        staffData.firstName = data.firstName;
         $("#pGreeting").text("Hello " + staffData.firstName + "!");
         getTodayAppts();
         getPendingAppts();
@@ -103,7 +103,9 @@ function getPendingAppts(event) {
     })
     .fail(showAjaxError);
     $("#pendingApptTable").on("click", ".BtnConfirm", confirmPendingAppt);
-    $('.form_datetime').datetimepicker({
+    var $nmdt1 = $('.form_datetime');
+    if ($nmdt1.length > 0) {
+        $('.form_datetime').datetimepicker({
             weekStart: 1,
             todayBtn:  1,
             autoclose: 1,
@@ -112,7 +114,8 @@ function getPendingAppts(event) {
             forceParse: 0,
             showMeridian: 1
         });
-
+    }
+    
     $('#selectDoctorName option').remove();
     $.getJSON("api/staffs.php/doctors",
     function(data) {

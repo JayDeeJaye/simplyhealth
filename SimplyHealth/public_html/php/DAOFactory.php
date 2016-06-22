@@ -11,6 +11,8 @@
  *
  * @author julie
  */
+include_once('MongoDBDAOFactory.php');
+
 abstract class DAOFactory {
     
     // Database options

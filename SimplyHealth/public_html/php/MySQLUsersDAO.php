@@ -18,28 +18,16 @@ class MySQLUsersDAO implements usersDAO {
         VALUES ('?','?',?)
 SQL;
 
+    const SQL_FIND_BY_ID = <<<SQL
+        SELECT  id, username, password, roleid 
+        FROM users
+        WHERE id = ?
+SQL;
+
     const SQL_FIND_BY_USER_NAME = <<<SQL
-        SELECT  username, password, roleid 
+        SELECT  id, username, password, roleid 
         FROM users
         WHERE username = '?'
-SQL;
-
-    const SQL_FIND_PATIENT_BY_USER_NAME = <<<SQL
-        SELECT  patient.id patientId, 
-            patient.firstname pFName, 
-            patient.lastname pLName
-        FROM patient
-        INNER JOIN users ON patient.userid = users.id
-        WHERE users.username = '?'
-SQL;
-
-    const SQL_FIND_STAFF_BY_USER_NAME = <<<SQL
-        SELECT  staffs.id staffId, 
-            staffs.firstname sFName, 
-            staffs.lastname sLName
-        FROM staffs
-        INNER JOIN users ON staffs.userid = users.id
-        WHERE users.username = '?'
 SQL;
 
     public function __destruct() {
@@ -65,7 +53,7 @@ SQL;
         $sql = MySQLHelper::prepareSQL(self::SQL_FIND_BY_USER_NAME, array($userName));
         if ($result = $this->dbConn->query($sql)) {
             if ($row = $result->fetch_assoc()) {
-                $data = $this->mapRsUserData($row);
+                $data = $this->mapRsData($row);
                 return $data;
             }
         } else {
@@ -73,12 +61,12 @@ SQL;
         }               
     }
 
-    public function findPatientByUserName($userName) {
+    public function findById($userId) {
         $this->dbConn = MySQLDAOFactory::createConnection();
-        $sql = MySQLHelper::prepareSQL(self::SQL_FIND_PATIENT_BY_USER_NAME, array($userName));
+        $sql = MySQLHelper::prepareSQL(self::SQL_FIND_BY_ID, array($userId));
         if ($result = $this->dbConn->query($sql)) {
             if ($row = $result->fetch_assoc()) {
-                $data = $this->mapRsPatientData($row);
+                $data = $this->mapRsData($row);
                 return $data;
             }
         } else {
@@ -86,59 +74,13 @@ SQL;
         }               
     }
 
-    public function findStaffByUserName($userName) {
-        $this->dbConn = MySQLDAOFactory::createConnection();
-        $sql = MySQLHelper::prepareSQL(self::SQL_FIND_STAFF_BY_USER_NAME, array($userName));
-        if ($result = $this->dbConn->query($sql)) {
-            if ($row = $result->fetch_assoc()) {
-                $data = $this->mapRsStaffData($row);
-                return $data;
-            }
-        } else {
-            throw new Exception(mysqli_error($this->dbConn));
-        }               
-    }
-
-    private function mapRsUserData ($row) {
+    private function mapRsData ($row) {
         $p = new UsersDTO();
-        $p->setRoleId($row["roleid"]);
-        $p->setUserName($row["username"]);
-        $p->setPassword($row["password"]);
-        
-        return $p;
-    }
-
-    private function mapRsPatientData ($row) {
-        $p = new UsersDTO();
-        /*
         $p->setId($row["id"]);
         $p->setRoleId($row["roleid"]);
         $p->setUserName($row["username"]);
         $p->setPassword($row["password"]);
-        */
-        $patient = new PatientDTO();
-        $patient->setId($row["patientId"]);
-        $patient->setFirstName($row["pFName"]);
-        $patient->setLastName($row["pLName"]);
         
-        $p->setPatient($patient);
-        return $p;
-    }
-    
-    private function mapRsStaffData ($row) {
-        $p = new UsersDTO();
-        /*
-        $p->setId($row["id"]);
-        $p->setRoleId($row["roleid"]);
-        $p->setUserName($row["username"]);
-        $p->setPassword($row["password"]);
-        */
-        $staff = new StaffsDTO();
-        $staff->setId($row["staffId"]);
-        $staff->setFirstName($row["sFName"]);
-        $staff->setLastName($row["sLName"]);
-        
-        $p->setStaff($staff);
         return $p;
     }
     

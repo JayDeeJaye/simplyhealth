@@ -143,6 +143,10 @@ class MongoDBPatientDAO implements patientDAO {
 //            throw new Exception(mysqli_error($this->dbConn));
 //        }               
     }
+    
+    public function findByUserId($userId) {
+        
+    }
 
 //    private function mapRsData ($row) {
 //        $p = new PatientDTO();

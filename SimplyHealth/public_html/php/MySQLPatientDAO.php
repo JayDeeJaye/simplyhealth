@@ -56,6 +56,16 @@ SQL;
         WHERE id = ?
 SQL;
         
+    const SQL_FIND_BY_USER_ID = <<<SQL
+        SELECT  id,userid,firstname,lastname,email,
+                phone,address1,address2,
+                city,state,zipcode,
+                emergency_contact_name,
+                emergency_contact_phone
+        FROM patient
+        WHERE userid = ?
+SQL;
+
     const SQL_UPDATE = <<<SQL
         UPDATE patient
             SET userid                  =  ?,
@@ -120,6 +130,19 @@ SQL;
     public function findById($patientId) {
         $this->dbConn = MySQLDAOFactory::createConnection();
         $sql = MySQLHelper::prepareSQL(self::SQL_FIND_BY_ID, array($patientId));
+        if ($result = $this->dbConn->query($sql)) {
+            if ($row = $result->fetch_assoc()) {
+                $data = $this->mapRsData($row);
+                return $data;
+            }
+        } else {
+            throw new Exception(mysqli_error($this->dbConn));
+        }               
+    }
+
+    public function findByUserId($userId) {
+        $this->dbConn = MySQLDAOFactory::createConnection();
+        $sql = MySQLHelper::prepareSQL(self::SQL_FIND_BY_USER_ID, array($userId));
         if ($result = $this->dbConn->query($sql)) {
             if ($row = $result->fetch_assoc()) {
                 $data = $this->mapRsData($row);

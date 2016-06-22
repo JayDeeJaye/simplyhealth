@@ -22,4 +22,5 @@ interface patientDAO {
     
     public function delete($patientId);
     
+    public function findByUserId($userId);
 }

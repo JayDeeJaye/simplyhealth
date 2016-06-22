@@ -6,8 +6,6 @@ class UsersDTO implements JsonSerializable {
     private $userName;
     private $password;
     private $roleId;
-    private $patient;
-    private $staff;
 
     public function getId() {
         return $this->id;
@@ -25,14 +23,6 @@ class UsersDTO implements JsonSerializable {
         return $this->roleId;
     }
 
-    public function getPatient() {
-        return $this->patient;
-    }
-
-    public function getStaff() {
-        return $this->staff;
-    }
-
     public function setId($id) {
         $this->id = $id;
     }
@@ -47,14 +37,6 @@ class UsersDTO implements JsonSerializable {
 
     public function setRoleId($roleId) {
         $this->roleId = $roleId;
-    }
-
-    public function setPatient($patient) {
-        $this->patient = $patient;
-    }
-
-    public function setStaff($staff) {
-        $this->staff = $staff;
     }
 
     public function jsonSerialize() {

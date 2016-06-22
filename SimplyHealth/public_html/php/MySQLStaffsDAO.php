@@ -42,7 +42,15 @@ SQL;
         FROM staffs
         WHERE id = ?
 SQL;
-        
+
+    const SQL_FIND_BY_USER_ID = <<<SQL
+        SELECT  id,userid,firstname,lastname,email,
+                phone,address1,address2,
+                city,state,zipcode
+        FROM staffs
+        WHERE userid = ?
+SQL;
+    
     public function __destruct() {
         if (isset($this->dbConn)){
             $this->dbConn->close();
@@ -94,6 +102,19 @@ SQL;
     public function findById($staffId) {
         $this->dbConn = MySQLDAOFactory::createConnection();
         $sql = MySQLHelper::prepareSQL(self::SQL_FIND_BY_ID, array($staffId));
+        if ($result = $this->dbConn->query($sql)) {
+            if ($row = $result->fetch_assoc()) {
+                $data = $this->mapRsData($row);
+                return $data;
+            }
+        } else {
+            throw new Exception(mysqli_error($this->dbConn));
+        }               
+    }
+
+    public function findByUserId($userId) {
+        $this->dbConn = MySQLDAOFactory::createConnection();
+        $sql = MySQLHelper::prepareSQL(self::SQL_FIND_BY_USER_ID, array($userId));
         if ($result = $this->dbConn->query($sql)) {
             if ($row = $result->fetch_assoc()) {
                 $data = $this->mapRsData($row);

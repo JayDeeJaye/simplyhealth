@@ -9,5 +9,7 @@ interface staffsDAO {
     public function findAll();
     
     public function findAllDoctors();
+
+    public function findByUserId($userId);
 }
 

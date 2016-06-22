@@ -27,8 +27,8 @@ $(document).ready(function() {
 
     $.getJSON("api/login.php/whoami",
       function(data) {
-        patientData.id = data.patient.id;
-        patientData.firstName = data.patient.firstName;
+        patientData.id = data.id;
+        patientData.firstName = data.firstName;
         $("#pGreeting").text("Hello " + patientData.firstName + "!");
         getMyAppts();
         getMyPatientData();
@@ -66,15 +66,18 @@ function getMyAppts(event) {
         }
     })
     .fail(showAjaxError);
-    $('.form_datetime').datetimepicker({
-        weekStart: 1,
-        todayBtn:  1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        forceParse: 0,
-        showMeridian: 1
-    });
+    var $nmdt1 = $('.form_datetime');
+    if ($nmdt1.length > 0) {
+        $('.form_datetime').datetimepicker({
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+    }
 }
 
 function addRowIntoTable() {
