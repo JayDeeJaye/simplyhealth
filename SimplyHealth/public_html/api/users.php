@@ -1,63 +1,44 @@
 <?php
+    ini_set("display_errors","1");
+    ERROR_REPORTING(E_ALL);
 
-require_once('apiHeader.php');
+    require_once('apiHeader.php');
+    require_once('../php/MySQLDAOFactory.php');
+    require_once('../php/UsersDTO.php');
 
-// Open a connection to the database
-$dbConn= new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
+    function getData($inData) {
+        $p = new UsersDTO();
 
-if ($verb == 'POST') {
-    // Add the user to the database
-    $username = mysqli_real_escape_string($dbConn,$params['username']);
-    $password = mysqli_real_escape_string($dbConn,$params['password']);
-    $roleid = mysqli_real_escape_string($dbConn,$params['roleId']);
-    $sql ="INSERT INTO users (username,password, roleid) values ('$username','$password', '$roleid')";
+        $p->setUserName($inData['userName']);
+        $p->setPassword($inData['password']);
+        $p->setRoleId($inData['roleId']);
 
-    if ($dbConn->query($sql)) {
-        // success
-        $userId = $dbConn->insert_id;
-        $status = "201";
-        $url="api/users.php/$userId";
-        $header="Location: api/users.php/$userId; Content-Type: application/json";
-        $data['id']=$userId;
-    } else {
-        throw new Exception(mysqli_error($dbConn),"400");
+        return $p;
     }
-} else if ($verb == 'GET') {
-    if ($url_pieces[1] == "me") {
-        // Get the current user and info
-        session_start();
 
-        if (!($me = $_SESSION['username'])) {
-            throw new Exception("No current user!");
-        }
-        $sql = "SELECT u.id userId, p.id patientId, p.firstname firstName "
-                 . "FROM users u LEFT JOIN patient p ON (p.userid = u.id) "
-                 . "WHERE u.username='$me'";
+    $myDAOFactory = DAOFactory::getDAOFactory(DAOFactory::DB_MYSQL);
+    $usersDAO = $myDAOFactory->getUsersDAO();
 
-        if ($result = $dbConn->query($sql)) {
+    switch($verb) {
+        case 'POST':
+            $user = getData($params);
+            
+            try {
+                $usersDAO->create($user);
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage());
+            }
 
-            $row = $result->fetch_array(MYSQLI_ASSOC);
-            $data['userId'] = $row['userId'];
-            $data['patient'] = [
-              "id" => $row['patientId'],
-              "firstName" => $row['firstName']
-            ];
-            $status = "200";
-            $header="Content-Type: application/json";
-            $result->close();
-        } else {
-            throw new Exception(mysqli_error($dbConn),"400");
-        }
-    } else {
-        throw new Exception($url_pieces[1] . " not implemented","404");
+            $url="api/users.php/{$user->getId()}";
+            header("Location: $url",null,"201");
+            header("Content-Type: application/json");
+            $data['id']=$user->getId();
+            break;
+        default:
+            throw new Exception("$verb not implemented","405");
+            break;
     }
-    
-} else {
-    throw new Exception("Method Not Supported: $verb", 405);
-}
-// Send the response
 
-$dbConn->close();
-
-header($header,null,$status);
-echo json_encode($data);
+    if (isset($data)) {
+        echo json_encode($data,JSON_PRETTY_PRINT);
+    }

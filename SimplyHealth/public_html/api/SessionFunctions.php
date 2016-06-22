@@ -34,8 +34,8 @@ class sessionClass
     public function _open(){
         global $_sess_db;
 
-        if ($_sess_db = mysql_connect('127.0.0.1', 'root', '')) {
-            return mysql_select_db('simplyhealth', $_sess_db);
+        if ($_sess_db = @mysql_connect('127.0.0.1', 'root', '')) {
+            return @mysql_select_db('simplyhealth', $_sess_db);
         }
 
         return FALSE;

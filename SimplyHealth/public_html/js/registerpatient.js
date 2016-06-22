@@ -70,7 +70,7 @@ $("form").submit(function(e) {
     });
 
     // create the user first, we'll need the id
-    userData.username = userName;
+    userData.userName = userName;
     userData.password = pwd;
     $.post("api/users.php",
         JSON.stringify(userData),
