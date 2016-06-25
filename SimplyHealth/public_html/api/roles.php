@@ -10,7 +10,29 @@
     $myDAOFactory = DAOFactory::getDAOFactory(DB_TYPE);
     $rolesDAO = $myDAOFactory->getRolesDAO();
 
+    function getData($inData) {
+        $p = new RolesDTO();
+
+        $p->setRoleName($inData['roleName']);
+
+        return $p;
+    }
+
     switch($verb) {
+       case 'POST':
+            $roles = getData($params);
+            
+            try {
+                $rolesDAO->create($roles);
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage());
+            }
+
+            $url="api/roles.php/{$roles->getId()}";
+            header("Location: $url",null,"201");
+            header("Content-Type: application/json");
+            $data['id']=$roles->getId();
+            break;
        case 'GET': 
             if (isset($url_pieces[1])) {
                 $roleName = $url_pieces[1];
