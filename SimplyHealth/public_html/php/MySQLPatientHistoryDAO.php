@@ -7,7 +7,7 @@
  */
 
 /**
- * Description of MySQLPatientDAO
+ * Description of MySQLPatientHistoryDAO
  *
  * @author julie
  */
@@ -26,7 +26,7 @@ class MySQLPatientHistoryDAO implements patientHistoryDAO {
         INTO patient_history(
                 eczema_self_ind, highchol_self_ind, highbp_self_ind, 
                 mental_self_ind, obesity_self_ind, patient_id
-             ) VALUES (?,?,?,?,?,?)
+             ) VALUES ('?','?','?','?','?',?)
 SQL;
     const SQL_FIND_BY_ID = <<<SQL
         SELECT patient_id, eczema_self_ind, highchol_self_ind, highbp_self_ind, 
@@ -36,11 +36,11 @@ SQL;
         
     const SQL_UPDATE = <<<SQL
         UPDATE patient_history 
-           SET eczema_self_ind=?,
-               highchol_self_ind=?,
-               highbp_self_ind=?,
-               mental_self_ind=?,
-               obesity_self_ind=? 
+           SET eczema_self_ind='?',
+               highchol_self_ind='?',
+               highbp_self_ind='?',
+               mental_self_ind='?',
+               obesity_self_ind='?' 
          WHERE patient_id=?
 SQL;
     const SQL_DELETE = "DELETE FROM patient_history WHERE patient_id = ?";
@@ -100,11 +100,11 @@ SQL;
     private function mapRsData ($row) {
         $p = new PatientHistoryDTO();
         $p->setPatientId($row["patient_id"]);
-        $p->setEczemaSelfInd($row['eczemaSelfInd']);  
-        $p->setHighCholSelfInd($row['highCholSelfInd']);
-        $p->setHighBpSelfInd($row['highBpSelfInd']);  
-        $p->setMentalSelfInd($row['mentalSelfInd']);  
-        $p->setObesitySelfInd($row['obesitySelfInd']); 
+        $p->setEczemaSelfInd($row['eczema_self_ind']);  
+        $p->setHighCholSelfInd($row['highchol_self_ind']);
+        $p->setHighBpSelfInd($row['highbp_self_ind']);  
+        $p->setMentalSelfInd($row['mental_self_ind']);  
+        $p->setObesitySelfInd($row['obesity_self_ind']); 
         return $p;
     }
     

@@ -32,8 +32,6 @@ class MySQLDAOFactory extends DAOFactory {
         return new MySQLPatientHistoryDAO();
     }
     
-    }    
-
     public function getUsersDAO() {
         return new MySQLUsersDAO();
     }    

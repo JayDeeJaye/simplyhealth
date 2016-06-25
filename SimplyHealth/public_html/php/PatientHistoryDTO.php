@@ -11,8 +11,8 @@
  *
  * @author julie
  */
-class PatientHistoryDTO implements JsonSerializable, MongoDB\BSON\Persistable {
-    
+//class PatientHistoryDTO implements JsonSerializable, MongoDB\BSON\Persistable {
+class PatientHistoryDTO implements JsonSerializable {    
     private $patientId;      
     private $eczemaSelfInd;  
     private $highCholSelfInd;
@@ -73,28 +73,28 @@ class PatientHistoryDTO implements JsonSerializable, MongoDB\BSON\Persistable {
         return (object) $result;
     }
 
-    function bsonSerialize()
-    {
-        foreach (get_object_vars($this) as $key => $value) {
-            if ($key === "patientId") {
-                if ($value !== null) {
-                    $result['patientId'] = new MongoDB\BSON\ObjectId($value);
-                }
-            } else {
-                $result[$key] = $value;
-            }
-        }
-        return (object) $result;
-    }
-
-    function bsonUnserialize(array $data)
-    {
-        $this->patientId        = (string) $data['patientId'];
-        $this->eczemaSelfInd    = $data['eczemaSelfInd'];  
-        $this->highCholSelfInd  = $data['highCholSelfInd'];
-        $this->highBpSelfInd    = $data['highBpSelfInd'];  
-        $this->mentalSelfInd    = $data['mentalSelfInd'];  
-        $this->obesitySelfInd   = $data['obesitySelfInd']; 
-    }
+//    function bsonSerialize()
+//    {
+//        foreach (get_object_vars($this) as $key => $value) {
+//            if ($key === "patientId") {
+//                if ($value !== null) {
+//                    $result['patientId'] = new MongoDB\BSON\ObjectId($value);
+//                }
+//            } else {
+//                $result[$key] = $value;
+//            }
+//        }
+//        return (object) $result;
+//    }
+//
+//    function bsonUnserialize(array $data)
+//    {
+//        $this->patientId        = (string) $data['patientId'];
+//        $this->eczemaSelfInd    = $data['eczemaSelfInd'];  
+//        $this->highCholSelfInd  = $data['highCholSelfInd'];
+//        $this->highBpSelfInd    = $data['highBpSelfInd'];  
+//        $this->mentalSelfInd    = $data['mentalSelfInd'];  
+//        $this->obesitySelfInd   = $data['obesitySelfInd']; 
+//    }
     
 }
